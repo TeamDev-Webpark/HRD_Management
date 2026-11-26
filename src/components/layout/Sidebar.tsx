@@ -132,13 +132,16 @@ function SidebarNavList({
                 const firstTabKey = item.children[0]?.tabKey;
 
                 return (
-                  <div className="mt-1.5 space-y-2.5 pb-1">
+                  <div className="mt-2 space-y-3 pb-1">
                     {groupedSections.map((section, secIdx) => (
                       <div key={section.groupName ?? secIdx}>
                         {section.groupName && (
-                          <p className="mb-1 pl-5 text-[11px] font-semibold text-[#94A3B8]">
-                            {section.groupName}
-                          </p>
+                          <div className="mb-1.5 pl-4">
+                            <span className="inline-flex items-center gap-1.5 rounded-md bg-[#F4F6FA] px-2.5 py-1 text-[11.5px] font-bold text-[#334155]">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]/70" />
+                              {section.groupName}
+                            </span>
+                          </div>
                         )}
                         <div className="relative ml-6 pl-6">
                           {/* Continuous subtle vertical timeline line */}
