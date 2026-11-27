@@ -26,7 +26,7 @@ import {
   X,
 } from "lucide-react";
 import { useLayout } from "@/context/LayoutContext";
-import { ACTIVE_SIDEBAR_MENUS } from "@/data/mock/layout";
+import { ACTIVE_SIDEBAR_MENUS, ROLE_HOME_ROUTE } from "@/data/mock/layout";
 import type { SidebarMenuItem } from "@/types/hrd";
 
 function MenuIcon({
@@ -128,7 +128,14 @@ function SidebarNavList({
 
           <ul className="space-y-1">
             {sec.items.map((item) => {
-              const hasChildren = Boolean(item.children?.length);
+              const allowedChildren = item.children?.filter(
+                (sub) => !sub.roles || sub.roles.includes(role)
+              );
+              const hasChildren = Boolean(allowedChildren && allowedChildren.length > 1);
+              const singleHref =
+                allowedChildren && allowedChildren.length === 1
+                  ? allowedChildren[0].href
+                  : item.href;
               const isCurrentRoute =
                 pathname === item.href || (item.href === "/dashboard" && pathname === "/");
               const isExpanded = expandedId === item.id;
@@ -164,12 +171,12 @@ function SidebarNavList({
                 )}
               </button>
 
-              {isExpanded && item.children && (() => {
-                const hasGroups = item.children.some((c) => Boolean(c.group));
-                const groupedSections: { groupName: string | null; items: typeof item.children }[] = [];
+              {isExpanded && allowedChildren && (() => {
+                const hasGroups = allowedChildren.some((c) => Boolean(c.group));
+                const groupedSections: { groupName: string | null; items: typeof allowedChildren }[] = [];
 
                 if (hasGroups) {
-                  item.children.forEach((child) => {
+                  allowedChildren.forEach((child) => {
                     const gName = child.group ?? "อื่นๆ";
                     const existing = groupedSections.find((s) => s.groupName === gName);
                     if (existing) {
@@ -179,10 +186,10 @@ function SidebarNavList({
                     }
                   });
                 } else {
-                  groupedSections.push({ groupName: null, items: item.children });
+                  groupedSections.push({ groupName: null, items: allowedChildren });
                 }
 
-                const firstTabKey = item.children[0]?.tabKey;
+                const firstTabKey = allowedChildren[0]?.tabKey;
 
                 return (
                   <div className="mb-2 mt-2 space-y-3 border-b border-slate-700/70 pb-3.5">
@@ -247,7 +254,7 @@ function SidebarNavList({
               return (
                 <li key={item.id}>
                   <Link
-                    href={item.href}
+                    href={singleHref}
                     title={collapsed ? `${item.label} (${item.labelEn})` : undefined}
                     onClick={() => isMobile && onNavigate()}
                     className={`group flex items-center rounded-xl py-2.5 text-[14px] transition-all ${
@@ -272,7 +279,7 @@ function SidebarNavList({
 }
 
 export function Sidebar() {
-  const { sidebarCollapsed, toggleSidebarCollapsed, mobileMenuOpen, setMobileMenuOpen } =
+  const { sidebarCollapsed, toggleSidebarCollapsed, mobileMenuOpen, setMobileMenuOpen, role } =
     useLayout();
 
   const renderContent = (isMobile: boolean) => {
@@ -287,7 +294,7 @@ export function Sidebar() {
           }`}
         >
           <Link
-            href="/dashboard"
+            href={ROLE_HOME_ROUTE[role]}
             onClick={() => isMobile && setMobileMenuOpen(false)}
             className="flex min-w-0 items-center gap-3"
           >

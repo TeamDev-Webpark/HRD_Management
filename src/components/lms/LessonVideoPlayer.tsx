@@ -53,6 +53,7 @@ export function LessonVideoPlayer({
   chapter,
   chapterIndex,
   totalChapters,
+  onCheckpointAnswered,
   onVideoCompleted,
 }: {
   courseCode: string;
@@ -60,6 +61,7 @@ export function LessonVideoPlayer({
   chapter: LessonChapter;
   chapterIndex: number;
   totalChapters: number;
+  onCheckpointAnswered?: (result: ChapterQuizCompletionResult) => void;
   onVideoCompleted?: (result?: ChapterQuizCompletionResult) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -218,6 +220,14 @@ export function LessonVideoPlayer({
       [activeCheckpoint.id]: { choice: selectedChoice, isCorrect },
     };
     setCheckpointResults(nextResults);
+    const correctCount = Object.values(nextResults).filter((r) => r.isCorrect).length;
+    const totalCount = checkpoints.length;
+    onCheckpointAnswered?.({
+      passed: totalCount === 0 || correctCount === totalCount,
+      correctCount,
+      totalCount,
+      checkpointResults: nextResults,
+    });
     setAnsweredCheckpointIds((prev) => {
       const next = new Set(prev);
       next.add(activeCheckpoint.id);

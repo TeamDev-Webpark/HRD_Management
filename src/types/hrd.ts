@@ -32,6 +32,7 @@ export interface SidebarSubMenuItem {
   href: string;
   tabKey: string;
   group?: string;
+  roles?: RoleKey[];
 }
 
 export interface SidebarMenuItem {

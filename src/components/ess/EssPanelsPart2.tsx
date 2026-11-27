@@ -9,6 +9,8 @@ import {
   Eye,
   GraduationCap,
   PlayCircle,
+  Printer,
+  RotateCcw,
   Trophy,
 } from "lucide-react";
 import {
@@ -34,9 +36,11 @@ import {
 export function EssTrainingPanel({
   items,
   onEnroll,
+  onCancel,
 }: {
   items: EssTrainingItem[];
   onEnroll: (trainingId: string, courseName: string) => void;
+  onCancel: (trainingId: string, courseName: string) => void;
 }) {
   const handleEnroll = (item: EssTrainingItem) => {
     onEnroll(item.id, item.courseName);
@@ -117,9 +121,21 @@ export function EssTrainingPanel({
                         ลงทะเบียน
                       </Button>
                     </Tooltip>
+                  ) : item.approvalStatus === "pending" ? (
+                    <Tooltip content="ยกเลิกคำขอลงทะเบียนที่รออนุมัติ (คืนที่นั่งว่างทันที)">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        leftIcon={<RotateCcw className="h-3.5 w-3.5" />}
+                        onClick={() => onCancel(item.id, item.courseName)}
+                        className="w-[104px] justify-center"
+                      >
+                        ยกเลิกคำขอ
+                      </Button>
+                    </Tooltip>
                   ) : (
                     <span className="inline-flex w-[104px] items-center justify-center text-xs font-medium text-emerald-600">
-                      สมัครแล้ว
+                      อนุมัติแล้ว
                     </span>
                   )}
                 </div>
@@ -286,9 +302,20 @@ export function EssCertificatesPanel({ certs }: { certs: EssCertificateItem[] })
         title="ตัวอย่างใบประกาศนียบัตร (E-Certificate)"
         size="md"
         footer={
-          <Button variant="primary" onClick={() => setPreview(null)}>
-            ปิดหน้าต่าง
-          </Button>
+          <>
+            <Button variant="outline" onClick={() => setPreview(null)}>
+              ปิดหน้าต่าง
+            </Button>
+            <Button
+              variant="primary"
+              leftIcon={<Printer className="h-4 w-4" />}
+              onClick={() => {
+                if (typeof window !== "undefined") window.print();
+              }}
+            >
+              พิมพ์ / บันทึก PDF
+            </Button>
+          </>
         }
       >
         {preview && (

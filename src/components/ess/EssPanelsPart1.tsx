@@ -383,17 +383,28 @@ export function EssPerformancePanel({
   const [selected, setSelected] = useState<EssGoalItem | null>(null);
   const [formProgress, setFormProgress] = useState("80");
   const [formScore, setFormScore] = useState("4.5");
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const openEdit = (g: EssGoalItem) => {
     setSelected(g);
     setFormProgress(String(g.progress));
     setFormScore(String(g.selfScore ?? 4.0));
+    setValidationError(null);
   };
 
   const handleSave = () => {
     if (!selected) return;
-    const pct = Math.min(100, Math.max(0, Number(formProgress) || 0));
-    const score = Math.min(5, Math.max(1, Number(formScore) || 4));
+    const pct = Number(formProgress);
+    const score = Number(formScore);
+    if (Number.isNaN(pct) || pct < 0 || pct > 100) {
+      setValidationError("กรุณากรอกความคืบหน้าให้อยู่ระหว่าง 0 – 100% เท่านั้น");
+      return;
+    }
+    if (Number.isNaN(score) || score < 1 || score > 5) {
+      setValidationError("กรุณากรอกคะแนนประเมินตนเองให้อยู่ระหว่าง 1.0 – 5.0 เท่านั้น");
+      return;
+    }
+    setValidationError(null);
     onUpdateGoal(selected.id, pct, score);
     setSelected(null);
   };
@@ -516,13 +527,21 @@ export function EssPerformancePanel({
         }
       >
         <div className="space-y-3.5">
+          {validationError && (
+            <div className="rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-xs font-semibold text-rose-700">
+              {validationError}
+            </div>
+          )}
           <Input
             label="ความคืบหน้า (0–100%)"
             type="number"
             min={0}
             max={100}
             value={formProgress}
-            onChange={(e) => setFormProgress(e.target.value)}
+            onChange={(e) => {
+              setFormProgress(e.target.value);
+              setValidationError(null);
+            }}
           />
           <Input
             label="คะแนนประเมินตนเอง (1.0 – 5.0)"
@@ -531,7 +550,10 @@ export function EssPerformancePanel({
             min={1}
             max={5}
             value={formScore}
-            onChange={(e) => setFormScore(e.target.value)}
+            onChange={(e) => {
+              setFormScore(e.target.value);
+              setValidationError(null);
+            }}
           />
         </div>
       </Modal>

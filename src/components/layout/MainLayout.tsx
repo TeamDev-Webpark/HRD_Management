@@ -1,14 +1,31 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useLayout } from "@/context/LayoutContext";
+import { ROLE_HOME_ROUTE } from "@/data/mock/layout";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 
+const EMPLOYEE_ALLOWED_ROUTES = ["/ess", "/lms", "/login"];
+const ADMIN_ONLY_ROUTES = ["/roles", "/settings", "/hrm-reference"];
+
 export function MainLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const { sidebarCollapsed } = useLayout();
+  const router = useRouter();
+  const { sidebarCollapsed, role } = useLayout();
+
+  const isUnauthorized =
+    pathname !== "/login" &&
+    pathname !== "/ui-kit" &&
+    ((role === "employee" && !EMPLOYEE_ALLOWED_ROUTES.includes(pathname)) ||
+      (role === "manager" && ADMIN_ONLY_ROUTES.includes(pathname)));
+
+  useEffect(() => {
+    if (isUnauthorized) {
+      router.replace(ROLE_HOME_ROUTE[role]);
+    }
+  }, [isUnauthorized, role, router]);
 
   if (pathname === "/login") {
     return <>{children}</>;
@@ -24,7 +41,15 @@ export function MainLayout({ children }: { children: ReactNode }) {
       >
         <Topbar />
         <main className="flex-1 px-4 py-4 sm:px-6">
-          <div className="w-full">{children}</div>
+          <div className="w-full">
+            {isUnauthorized ? (
+              <div className="rounded-2xl border border-[#EEF2F6] bg-white p-8 text-center text-sm text-[#64748B]">
+                กำลังนำทางไปยังหน้าหลักตามสิทธิ์การใช้งานของคุณ...
+              </div>
+            ) : (
+              children
+            )}
+          </div>
         </main>
       </div>
     </div>

@@ -490,6 +490,9 @@ export function ElearningClassroomPanel({
                       chapter={chapter}
                       chapterIndex={stage.index}
                       totalChapters={totalChapters}
+                      onCheckpointAnswered={(result) => {
+                        setChapterQuizResults((prev) => ({ ...prev, [chapter.id]: result }));
+                      }}
                       onVideoCompleted={(result) => {
                         if (result) {
                           setChapterQuizResults((prev) => ({ ...prev, [chapter.id]: result }));

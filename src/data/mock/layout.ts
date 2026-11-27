@@ -72,13 +72,13 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
     icon: "lms",
     roles: ["admin", "manager", "employee"],
     children: [
-      { id: "lms-courses", label: "ห้องเรียนออนไลน์", href: "/lms?tab=courses", tabKey: "courses", group: "คอร์สและสื่อการเรียน" },
-      { id: "lms-lessons", label: "จัดการบทเรียน", href: "/lms?tab=lessons", tabKey: "lessons", group: "คอร์สและสื่อการเรียน" },
-      { id: "lms-materials", label: "สื่อการเรียนรู้", href: "/lms?tab=materials", tabKey: "materials", group: "คอร์สและสื่อการเรียน" },
-      { id: "lms-questions", label: "คลังข้อสอบ", href: "/lms?tab=questions", tabKey: "questions", group: "สอบและใบรับรอง" },
-      { id: "lms-assessments", label: "แบบทดสอบออนไลน์", href: "/lms?tab=assessments", tabKey: "assessments", group: "สอบและใบรับรอง" },
-      { id: "lms-progress", label: "ความก้าวหน้าการเรียน", href: "/lms?tab=progress", tabKey: "progress", group: "สอบและใบรับรอง" },
-      { id: "lms-certificates", label: "จัดการใบประกาศนียบัตร", href: "/lms?tab=certificates", tabKey: "certificates", group: "สอบและใบรับรอง" },
+      { id: "lms-courses", label: "ห้องเรียนออนไลน์", href: "/lms?tab=courses", tabKey: "courses", group: "คอร์สและสื่อการเรียน", roles: ["admin", "manager", "employee"] },
+      { id: "lms-lessons", label: "จัดการบทเรียน", href: "/lms?tab=lessons", tabKey: "lessons", group: "คอร์สและสื่อการเรียน", roles: ["admin", "manager"] },
+      { id: "lms-materials", label: "สื่อการเรียนรู้", href: "/lms?tab=materials", tabKey: "materials", group: "คอร์สและสื่อการเรียน", roles: ["admin", "manager"] },
+      { id: "lms-questions", label: "คลังข้อสอบ", href: "/lms?tab=questions", tabKey: "questions", group: "สอบและใบรับรอง", roles: ["admin", "manager"] },
+      { id: "lms-assessments", label: "แบบทดสอบออนไลน์", href: "/lms?tab=assessments", tabKey: "assessments", group: "สอบและใบรับรอง", roles: ["admin", "manager"] },
+      { id: "lms-progress", label: "ความก้าวหน้าการเรียน", href: "/lms?tab=progress", tabKey: "progress", group: "สอบและใบรับรอง", roles: ["admin", "manager"] },
+      { id: "lms-certificates", label: "จัดการใบประกาศนียบัตร", href: "/lms?tab=certificates", tabKey: "certificates", group: "สอบและใบรับรอง", roles: ["admin", "manager"] },
     ],
   },
   {
@@ -284,7 +284,7 @@ export const DEMO_USERS: Record<RoleKey, DemoUser> = {
   },
   employee: {
     id: "USR-003",
-    employeeCode: "EMP-00489",
+    employeeCode: "EMP-1024",
     name: "ณัฐพล เจริญสุข",
     email: "nattapol.c@company.co.th",
     initials: "ณจ",
@@ -293,8 +293,8 @@ export const DEMO_USERS: Record<RoleKey, DemoUser> = {
     company: "บริษัท เอนเตอร์ไพรส์ เทค จำกัด (มหาชน)",
     branch: "สำนักงานใหญ่ (กรุงเทพฯ)",
     department: "ฝ่ายวิศวกรรมซอฟต์แวร์",
-    position: "Senior Frontend Developer",
-    jobGrade: "JG-05",
+    position: "Senior Software Engineer",
+    jobGrade: "JG-06",
   },
 };
 

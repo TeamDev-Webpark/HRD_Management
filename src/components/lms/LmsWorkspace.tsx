@@ -18,6 +18,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { Card, CardContent, InfoHint, StatCard } from "@/components/ui";
+import { useLayout } from "@/context/LayoutContext";
 import { INITIAL_ELEARNING_COURSES } from "@/data/mock/elearningCurriculum";
 import {
   INITIAL_LEARNING_PROGRESS,
@@ -100,8 +101,10 @@ const LMS_TABS: {
 
 export function LmsWorkspace() {
   const searchParams = useSearchParams();
+  const { role } = useLayout();
   const tabParam = searchParams.get("tab") as LmsTabKey | null;
-  const activeMeta = LMS_TABS.find((t) => t.key === tabParam) ?? LMS_TABS[0];
+  const requestedMeta = LMS_TABS.find((t) => t.key === tabParam) ?? LMS_TABS[0];
+  const activeMeta = role === "employee" ? LMS_TABS[0] : requestedMeta;
   const activeTab: LmsTabKey = activeMeta.key;
 
   const [toast, setToast] = useState<string | null>(null);

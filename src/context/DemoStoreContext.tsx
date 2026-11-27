@@ -84,6 +84,7 @@ interface DemoStoreValue extends PersistedDemoState {
   updateEssGoal: (goalId: string, progress: number, selfScore: number) => void;
   completeEssIdp: (activityId: string) => void;
   enrollEssTraining: (trainingId: string) => void;
+  cancelEssTraining: (trainingId: string) => void;
   submitAssignedForm: (formId: string, note: string) => void;
 
   // MSS actions (auto-sync to ESS, Talent Pool & Notifications)
@@ -351,6 +352,40 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  // ESS -> MSS: Cancel Pending Training Request
+  const cancelEssTraining = useCallback((trainingId: string) => {
+    setState((prev) => {
+      const target = prev.essTrainings.find((t) => t.id === trainingId);
+      if (!target || !target.enrolled || target.approvalStatus !== "pending") return prev;
+
+      const nextTrainings = prev.essTrainings.map((t) =>
+        t.id === trainingId
+          ? {
+              ...t,
+              enrolled: false,
+              seatsLeft: t.seatsLeft + 1,
+              approvalStatus: undefined,
+            }
+          : t
+      );
+
+      const nextApprovals = prev.mssApprovals.filter(
+        (a) =>
+          !(
+            a.employeeCode === ESS_EMPLOYEE_PROFILE.employeeCode &&
+            a.courseName === target.courseName &&
+            a.status === "pending"
+          )
+      );
+
+      return {
+        ...prev,
+        essTrainings: nextTrainings,
+        mssApprovals: nextApprovals,
+      };
+    });
+  }, []);
+
   // ESS -> Admin: Submit Assigned Form / Document
   const submitAssignedForm = useCallback((formId: string, note: string) => {
     setState((prev) => {
@@ -613,6 +648,7 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       updateEssGoal,
       completeEssIdp,
       enrollEssTraining,
+      cancelEssTraining,
       submitAssignedForm,
       rateTeamMember,
       boostTeamCompetency,
@@ -631,6 +667,7 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       updateEssGoal,
       completeEssIdp,
       enrollEssTraining,
+      cancelEssTraining,
       submitAssignedForm,
       rateTeamMember,
       boostTeamCompetency,

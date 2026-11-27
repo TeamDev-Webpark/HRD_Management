@@ -111,6 +111,7 @@ export function EssWorkspace() {
     updateEssGoal,
     completeEssIdp,
     enrollEssTraining,
+    cancelEssTraining,
     submitAssignedForm,
   } = useDemoStore();
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -251,6 +252,10 @@ export function EssWorkspace() {
             onEnroll={(trainingId, courseName) => {
               enrollEssTraining(trainingId);
               notify(`ส่งคำขอลงทะเบียน "${courseName}" ไปยังหัวหน้างาน (MSS) เรียบร้อยแล้ว`);
+            }}
+            onCancel={(trainingId, courseName) => {
+              cancelEssTraining(trainingId);
+              notify(`ยกเลิกคำขอลงทะเบียน "${courseName}" เรียบร้อยแล้ว`);
             }}
           />
         )}

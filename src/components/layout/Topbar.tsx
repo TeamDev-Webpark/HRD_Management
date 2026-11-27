@@ -122,19 +122,21 @@ export function Topbar() {
           href: menu.children?.[0]?.href ?? menu.href,
         });
       }
-      menu.children?.forEach((sub) => {
-        if (
-          sub.label.toLowerCase().includes(q) ||
-          (sub.group && sub.group.toLowerCase().includes(q))
-        ) {
-          results.push({
-            id: sub.id,
-            title: sub.label,
-            subtitle: `${menu.label}${sub.group ? ` • ${sub.group}` : ""}`,
-            href: sub.href,
-          });
-        }
-      });
+      menu.children
+        ?.filter((sub) => !sub.roles || sub.roles.includes(role))
+        .forEach((sub) => {
+          if (
+            sub.label.toLowerCase().includes(q) ||
+            (sub.group && sub.group.toLowerCase().includes(q))
+          ) {
+            results.push({
+              id: sub.id,
+              title: sub.label,
+              subtitle: `${menu.label}${sub.group ? ` • ${sub.group}` : ""}`,
+              href: sub.href,
+            });
+          }
+        });
     });
     return results.slice(0, 7);
   }, [search, role]);
