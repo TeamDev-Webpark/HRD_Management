@@ -521,7 +521,7 @@ export const INITIAL_ELEARNING_COURSES: ElearningCourseCardItem[] = [
     description:
       "เทคนิคการตั้งเป้าหมาย OKR และ KPI ที่วัดผลได้จริง เชื่อมโยงกลยุทธ์องค์กรสู่ระดับทีมและรายบุคคล พร้อมแนวทางทำ Progress Check-in",
     standardLabel: "Performance",
-    category: "Leadership",
+    category: "Performance",
     durationHours: 2,
     validityMonths: 12,
     curriculum: {
