@@ -117,10 +117,10 @@ function SidebarNavList({
         <div key={sec.sectionName}>
           {!collapsed ? (
             <div className="mb-2 flex items-center gap-2 px-3">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-400">
+              <span className="text-[11px] font-semibold tracking-wider text-[#22D3EE]">
                 {sec.sectionName}
               </span>
-              <span className="h-px flex-1 bg-slate-800/90" aria-hidden="true" />
+              <span className="h-px flex-1 bg-[#22D3EE]/25" aria-hidden="true" />
             </div>
           ) : (
             secIdx > 0 && <div className="mx-2 my-2 h-px bg-slate-800" aria-hidden="true" />
@@ -185,7 +185,7 @@ function SidebarNavList({
                 const firstTabKey = item.children[0]?.tabKey;
 
                 return (
-                  <div className="mt-2 space-y-3 pb-1">
+                  <div className="mb-2 mt-2 space-y-3 border-b border-slate-700/70 pb-3.5">
                     {groupedSections.map((section, secIdx) => (
                       <div key={section.groupName ?? secIdx}>
                         {section.groupName && (

@@ -71,7 +71,7 @@ interface PersistedDemoState {
   assignedForms: AssignedFormItem[];
 }
 
-const STORAGE_KEY = "hrd_management_live_demo_v1";
+const STORAGE_KEY = "hrd_management_live_demo_v2";
 
 interface DemoStoreValue extends PersistedDemoState {
   pushNotification: (
