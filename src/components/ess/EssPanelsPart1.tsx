@@ -7,8 +7,10 @@ import {
   Award,
   CheckCircle2,
   Compass,
+  FileText,
   GraduationCap,
   Pencil,
+  Send,
   Target,
   TrendingUp,
 } from "lucide-react";
@@ -26,6 +28,7 @@ import {
   TableRow,
   Tooltip,
 } from "@/components/ui";
+import type { AssignedFormItem } from "@/context/DemoStoreContext";
 import {
   ESS_EMPLOYEE_PROFILE,
   type EssGoalItem,
@@ -33,7 +36,52 @@ import {
   type EssSkillItem,
 } from "@/data/mock/essData";
 
-export function EssOverviewPanel() {
+export function EssOverviewPanel({
+  assignedForms,
+  onSubmitForm,
+}: {
+  assignedForms: AssignedFormItem[];
+  onSubmitForm: (formId: string, note: string) => void;
+}) {
+  const [activeForm, setActiveForm] = useState<AssignedFormItem | null>(null);
+  const [responseNote, setResponseNote] = useState("");
+  // Structured fields by form type
+  const [evalScore1, setEvalScore1] = useState(4);
+  const [evalScore2, setEvalScore2] = useState(4);
+  const [evalScore3, setEvalScore3] = useState(5);
+  const [surveyTopic, setSurveyTopic] = useState("Generative AI & Data Analytics");
+  const [surveyFormat, setSurveyFormat] = useState("Online Live");
+  const [policyAccepted, setPolicyAccepted] = useState(false);
+
+  const openFormModal = (frm: AssignedFormItem) => {
+    setActiveForm(frm);
+    setResponseNote("");
+    setEvalScore1(4);
+    setEvalScore2(4);
+    setEvalScore3(5);
+    setSurveyTopic("Generative AI & Data Analytics");
+    setSurveyFormat("Online Live");
+    setPolicyAccepted(false);
+  };
+
+  const handleConfirmSubmit = () => {
+    if (!activeForm) return;
+    let summary = responseNote.trim();
+    if (activeForm.type === "แบบฟอร์มประเมิน") {
+      const avg = ((evalScore1 + evalScore2 + evalScore3) / 3).toFixed(2);
+      summary = `คะแนนประเมินตนเองเฉลี่ย ${avg}/5.0 (KPI: ${evalScore1}, คุณภาพงาน: ${evalScore2}, ทีมเวิร์ก: ${evalScore3})${summary ? ` • ${summary}` : ""}`;
+    } else if (activeForm.type === "แบบสำรวจความต้องการอบรม") {
+      summary = `หัวข้อที่สนใจ: ${surveyTopic} (รูปแบบ: ${surveyFormat})${summary ? ` • ${summary}` : ""}`;
+    } else {
+      summary = `ยืนยันอ่านและรับทราบนโยบายแล้ว${summary ? ` • ${summary}` : ""}`;
+    }
+    onSubmitForm(activeForm.id, summary);
+    setActiveForm(null);
+  };
+
+  const canSubmitForm =
+    activeForm?.type === "เอกสารรับทราบนโยบาย" ? policyAccepted : true;
+
   const quickLinks = [
     {
       title: "อัปเดตความคืบหน้า KPI / OKR",
@@ -105,6 +153,69 @@ export function EssOverviewPanel() {
         </Tooltip>
       </div>
 
+      {/* Live Assigned Forms / Documents from Admin */}
+      <div className="space-y-3 rounded-2xl border border-[#DBEAFE] bg-[#F8FAFF] p-5">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <FileText className="h-4.5 w-4.5 text-[#2563EB]" />
+            <h3 className="text-sm font-bold text-[#1E293B]">
+              แบบฟอร์มและเอกสารที่ได้รับมอบหมายจาก HRD / Admin
+            </h3>
+          </div>
+          <Badge variant="primary">
+            รอดำเนินการ {assignedForms.filter((f) => f.status === "pending").length} รายการ
+          </Badge>
+        </div>
+
+        <div className="space-y-2.5">
+          {assignedForms.map((frm) => (
+            <div
+              key={frm.id}
+              className="flex flex-col gap-3 rounded-xl border border-[#EEF2F6] bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-md bg-[#F3F0FF] px-2 py-0.5 font-mono text-[11px] font-semibold text-[#7C6CF6]">
+                    {frm.code}
+                  </span>
+                  <Badge variant="neutral">{frm.type}</Badge>
+                  <Badge variant={frm.status === "submitted" ? "success" : "warning"} dot>
+                    {frm.status === "submitted" ? "ส่งแล้ว" : "รอดำเนินการ"}
+                  </Badge>
+                </div>
+                <div className="mt-1.5 text-sm font-semibold text-[#1E293B]">{frm.title}</div>
+                <div className="mt-0.5 text-xs text-[#64748B]">
+                  ผู้ส่ง: {frm.senderName} • กำหนดส่ง: {frm.dueDate}
+                </div>
+                {frm.status === "submitted" && frm.submittedNote && (
+                  <div className="mt-1 text-xs font-medium text-emerald-700">
+                    บันทึกที่ส่งแล้ว: &ldquo;{frm.submittedNote}&rdquo; ({frm.submittedAt})
+                  </div>
+                )}
+              </div>
+              <div className="shrink-0">
+                {frm.status === "pending" ? (
+                  <Tooltip content="เปิดกรอกข้อมูลและส่งแบบฟอร์มกลับไปยังฝ่าย HRD / Admin">
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      leftIcon={<Send className="h-3.5 w-3.5" />}
+                      onClick={() => openFormModal(frm)}
+                    >
+                      เปิดทำแบบฟอร์ม
+                    </Button>
+                  </Tooltip>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">
+                    <CheckCircle2 className="h-4 w-4" /> ส่งเรียบร้อย
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Quick Action Cards */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {quickLinks.map((item) => (
@@ -128,18 +239,146 @@ export function EssOverviewPanel() {
           </Link>
         ))}
       </div>
+
+      <Modal
+        open={Boolean(activeForm)}
+        onClose={() => setActiveForm(null)}
+        title={activeForm?.title ?? "ทำแบบฟอร์ม"}
+        description={activeForm?.description}
+        size="md"
+        footer={
+          <>
+            <Button variant="outline" onClick={() => setActiveForm(null)}>
+              ยกเลิก
+            </Button>
+            <Button
+              variant="primary"
+              leftIcon={<Send className="h-4 w-4" />}
+              disabled={!canSubmitForm}
+              onClick={handleConfirmSubmit}
+            >
+              ส่งแบบฟอร์มกลับ HRD
+            </Button>
+          </>
+        }
+      >
+        {activeForm && (
+          <div className="space-y-4">
+            <div className="rounded-xl border border-[#EEF2F6] bg-[#F8FAFC] p-3 text-xs text-[#475569]">
+              ประเภท: <strong>{activeForm.type}</strong> • ผู้ส่ง:{" "}
+              <strong>{activeForm.senderName}</strong> • กำหนดส่ง:{" "}
+              <strong>{activeForm.dueDate}</strong>
+            </div>
+
+            {activeForm.type === "แบบฟอร์มประเมิน" && (
+              <div className="space-y-3 rounded-xl border border-[#EEF2F6] bg-white p-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-[#1E293B]">
+                    ให้คะแนนประเมินตนเองรายหัวข้อ (1–5 คะแนน)
+                  </span>
+                  <Badge variant="primary">
+                    เฉลี่ย {((evalScore1 + evalScore2 + evalScore3) / 3).toFixed(2)} / 5.0
+                  </Badge>
+                </div>
+                {[
+                  { label: "1. ความสำเร็จตามเป้าหมาย KPI / OKR", val: evalScore1, set: setEvalScore1 },
+                  { label: "2. คุณภาพงาน ความรับผิดชอบ และความตรงต่อเวลา", val: evalScore2, set: setEvalScore2 },
+                  { label: "3. การสื่อสารและการทำงานร่วมกับทีม", val: evalScore3, set: setEvalScore3 },
+                ].map((row) => (
+                  <div
+                    key={row.label}
+                    className="flex flex-wrap items-center justify-between gap-2 border-t border-[#F1F5F9] pt-2.5"
+                  >
+                    <span className="text-xs font-medium text-[#334155]">{row.label}</span>
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <button
+                          key={n}
+                          type="button"
+                          onClick={() => row.set(n)}
+                          className={`h-7 w-7 cursor-pointer rounded-lg text-xs font-bold transition-colors ${
+                            row.val === n
+                              ? "bg-[#2563EB] text-white"
+                              : "border border-[#E2E8F0] bg-[#F8FAFC] text-[#64748B] hover:border-[#2563EB]"
+                          }`}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeForm.type === "แบบสำรวจความต้องการอบรม" && (
+              <div className="space-y-3 rounded-xl border border-[#EEF2F6] bg-white p-4">
+                <Input
+                  label="หัวข้อ / ทักษะที่ต้องการเข้าอบรม"
+                  value={surveyTopic}
+                  onChange={(e) => setSurveyTopic(e.target.value)}
+                />
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold text-[#334155]">
+                    รูปแบบการอบรมที่สะดวก
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {["Classroom", "Online Live", "E-Learning (LMS)"].map((fmt) => (
+                      <button
+                        key={fmt}
+                        type="button"
+                        onClick={() => setSurveyFormat(fmt)}
+                        className={`cursor-pointer rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                          surveyFormat === fmt
+                            ? "border-[#2563EB] bg-[#EFF6FF] text-[#2563EB]"
+                            : "border-[#E2E8F0] bg-white text-[#64748B] hover:bg-[#F8FAFC]"
+                        }`}
+                      >
+                        {fmt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeForm.type === "เอกสารรับทราบนโยบาย" && (
+              <div className="space-y-3 rounded-xl border border-[#EEF2F6] bg-white p-4">
+                <p className="text-xs leading-relaxed text-[#475569]">
+                  เอกสารฉบับนี้ระบุแนวทางปฏิบัติและมาตรฐานการพัฒนาบุคลากรขององค์กรประจำปี 2569
+                  กรุณาตรวจสอบรายละเอียดและติ๊กยืนยันด้านล่างเพื่อบันทึกการรับทราบในระบบ
+                </p>
+                <label className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-blue-100 bg-blue-50/50 p-3 text-xs font-semibold text-[#1E40AF]">
+                  <input
+                    type="checkbox"
+                    checked={policyAccepted}
+                    onChange={(e) => setPolicyAccepted(e.target.checked)}
+                    className="h-4 w-4 accent-[#2563EB]"
+                  />
+                  <span>ข้าพเจ้าได้อ่านและรับทราบนโยบาย/เอกสารฉบับนี้ครบถ้วนแล้ว</span>
+                </label>
+              </div>
+            )}
+
+            <Input
+              label="สรุปผลงานเด่น / ข้อคิดเห็นเพิ่มเติม (ไม่บังคับ)"
+              placeholder="กรอกรายละเอียดเพิ่มเติม..."
+              value={responseNote}
+              onChange={(e) => setResponseNote(e.target.value)}
+            />
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
 
 export function EssPerformancePanel({
   goals,
-  onChange,
-  onNotify,
+  onUpdateGoal,
 }: {
   goals: EssGoalItem[];
-  onChange: (goals: EssGoalItem[]) => void;
-  onNotify: (msg: string) => void;
+  onUpdateGoal: (goalId: string, progress: number, selfScore: number) => void;
 }) {
   const [selected, setSelected] = useState<EssGoalItem | null>(null);
   const [formProgress, setFormProgress] = useState("80");
@@ -155,19 +394,7 @@ export function EssPerformancePanel({
     if (!selected) return;
     const pct = Math.min(100, Math.max(0, Number(formProgress) || 0));
     const score = Math.min(5, Math.max(1, Number(formScore) || 4));
-    onChange(
-      goals.map((row) =>
-        row.id === selected.id
-          ? {
-              ...row,
-              progress: pct,
-              selfScore: score,
-              status: pct >= 100 ? "completed" : pct >= 70 ? "on-track" : "needs-attention",
-            }
-          : row
-      )
-    );
-    onNotify(`อัปเดตผลดำเนินงานและคะแนนประเมินตนเอง (${selected.code}) เรียบร้อยแล้ว`);
+    onUpdateGoal(selected.id, pct, score);
     setSelected(null);
   };
 
@@ -397,20 +624,13 @@ export function EssSkillsPanel({ skills }: { skills: EssSkillItem[] }) {
 
 export function EssIdpPanel({
   items,
-  onChange,
-  onNotify,
+  onComplete,
 }: {
   items: EssIdpActivity[];
-  onChange: (items: EssIdpActivity[]) => void;
-  onNotify: (msg: string) => void;
+  onComplete: (activityId: string, title: string) => void;
 }) {
   const handleMarkDone = (item: EssIdpActivity) => {
-    onChange(
-      items.map((row) =>
-        row.id === item.id ? { ...row, progress: 100, status: "done" } : row
-      )
-    );
-    onNotify(`บันทึกกิจกรรม IDP "${item.title}" เสร็จสมบูรณ์ 100% แล้ว`);
+    onComplete(item.id, item.title);
   };
 
   return (

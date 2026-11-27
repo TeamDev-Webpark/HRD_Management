@@ -19,12 +19,11 @@ import {
   Users,
 } from "lucide-react";
 import { Card, InfoHint, Tooltip } from "@/components/ui";
+import { useDemoStore } from "@/context/DemoStoreContext";
 import {
   INITIAL_POTENTIAL_ASSESSMENTS,
-  INITIAL_TALENT_POOL,
   INITIAL_TALENT_REVIEWS,
   type PotentialAssessmentItem,
-  type TalentPoolItem,
   type TalentReviewItem,
 } from "@/data/mock/talentManagement";
 import {
@@ -115,7 +114,7 @@ export function TalentWorkspace() {
   const tabParam = searchParams.get("tab") as TalentTabKey | null;
   const activeTab: TalentTabKey = tabParam && VALID_TABS.includes(tabParam) ? tabParam : "pool";
 
-  const [pool, setPool] = useState<TalentPoolItem[]>(INITIAL_TALENT_POOL);
+  const { talentPool: pool, setTalentPool: setPool } = useDemoStore();
   const [potentials, setPotentials] = useState<PotentialAssessmentItem[]>(
     INITIAL_POTENTIAL_ASSESSMENTS
   );

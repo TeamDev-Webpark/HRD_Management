@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Badge, Button, Input, Modal, Tooltip } from "@/components/ui";
 import { useLayout } from "@/context/LayoutContext";
-import { DEMO_USERS } from "@/data/mock/layout";
+import { DEMO_USERS, ROLE_HOME_ROUTE } from "@/data/mock/layout";
 import type { RoleKey } from "@/types/hrd";
 
 const QUICK_ACCOUNTS: {
@@ -84,7 +84,7 @@ export function LoginView() {
     setRole(selectedRole);
 
     setTimeout(() => {
-      router.push("/dashboard");
+      router.push(ROLE_HOME_ROUTE[selectedRole]);
     }, 350);
   };
 

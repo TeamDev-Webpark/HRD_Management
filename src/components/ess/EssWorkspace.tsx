@@ -14,17 +14,12 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { Card, InfoHint, Tooltip } from "@/components/ui";
+import { useDemoStore } from "@/context/DemoStoreContext";
 import {
   ESS_EMPLOYEE_PROFILE,
   INITIAL_ESS_CERTIFICATES,
-  INITIAL_ESS_GOALS,
-  INITIAL_ESS_IDP,
   INITIAL_ESS_LMS_COURSES,
   INITIAL_ESS_SKILLS,
-  INITIAL_ESS_TRAININGS,
-  type EssGoalItem,
-  type EssIdpActivity,
-  type EssTrainingItem,
 } from "@/data/mock/essData";
 import {
   EssIdpPanel,
@@ -108,9 +103,16 @@ export function EssWorkspace() {
   const tabParam = searchParams.get("tab") as EssTabKey | null;
   const activeTab: EssTabKey = tabParam && VALID_TABS.includes(tabParam) ? tabParam : "overview";
 
-  const [goals, setGoals] = useState<EssGoalItem[]>(INITIAL_ESS_GOALS);
-  const [idpItems, setIdpItems] = useState<EssIdpActivity[]>(INITIAL_ESS_IDP);
-  const [trainings, setTrainings] = useState<EssTrainingItem[]>(INITIAL_ESS_TRAININGS);
+  const {
+    essGoals: goals,
+    essIdp: idpItems,
+    essTrainings: trainings,
+    assignedForms,
+    updateEssGoal,
+    completeEssIdp,
+    enrollEssTraining,
+    submitAssignedForm,
+  } = useDemoStore();
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const notify = (msg: string) => {
@@ -215,16 +217,42 @@ export function EssWorkspace() {
       )}
 
       <Card className="p-6">
-        {activeTab === "overview" && <EssOverviewPanel />}
+        {activeTab === "overview" && (
+          <EssOverviewPanel
+            assignedForms={assignedForms}
+            onSubmitForm={(formId, note) => {
+              submitAssignedForm(formId, note);
+              notify("ส่งแบบฟอร์มเรียบร้อยแล้ว (แจ้งเตือนไปยัง HRD / หัวหน้างานอัตโนมัติ)");
+            }}
+          />
+        )}
         {activeTab === "performance" && (
-          <EssPerformancePanel goals={goals} onChange={setGoals} onNotify={notify} />
+          <EssPerformancePanel
+            goals={goals}
+            onUpdateGoal={(goalId, progress, selfScore) => {
+              updateEssGoal(goalId, progress, selfScore);
+              notify("อัปเดตผล KPI และคะแนนประเมินตนเองแล้ว (ซิงค์ไปยังหน้าหัวหน้างานอัตโนมัติ)");
+            }}
+          />
         )}
         {activeTab === "skills" && <EssSkillsPanel skills={INITIAL_ESS_SKILLS} />}
         {activeTab === "idp" && (
-          <EssIdpPanel items={idpItems} onChange={setIdpItems} onNotify={notify} />
+          <EssIdpPanel
+            items={idpItems}
+            onComplete={(activityId, title) => {
+              completeEssIdp(activityId);
+              notify(`บันทึกกิจกรรม IDP "${title}" เสร็จสมบูรณ์แล้ว (ซิงค์ไปยัง MSS อัตโนมัติ)`);
+            }}
+          />
         )}
         {activeTab === "training" && (
-          <EssTrainingPanel items={trainings} onChange={setTrainings} onNotify={notify} />
+          <EssTrainingPanel
+            items={trainings}
+            onEnroll={(trainingId, courseName) => {
+              enrollEssTraining(trainingId);
+              notify(`ส่งคำขอลงทะเบียน "${courseName}" ไปยังหัวหน้างาน (MSS) เรียบร้อยแล้ว`);
+            }}
+          />
         )}
         {activeTab === "lms" && <EssLmsPanel courses={INITIAL_ESS_LMS_COURSES} />}
         {activeTab === "certificates" && (

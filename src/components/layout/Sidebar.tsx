@@ -74,58 +74,81 @@ function SidebarNavList({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const activeTabParam = searchParams.get("tab");
+  const { role } = useLayout();
 
-  const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({
-    "hrd-performance": pathname === "/performance",
-    "hrd-training": pathname === "/training",
-    "hrd-lms": pathname === "/lms",
-    "hrd-competency": pathname === "/competency",
-    "hrd-idp": pathname === "/idp",
-    "hrd-career": pathname === "/career",
-    "hrd-talent": pathname === "/talent",
-    "hrd-reports": pathname === "/reports",
-    "hrd-roles": pathname === "/roles",
-    "hrd-ess": pathname === "/ess",
-    "hrd-mss": pathname === "/mss",
-    "hrd-hrm": pathname === "/hrm-reference",
+  const visibleMenus = ACTIVE_SIDEBAR_MENUS.filter(
+    (item) => !item.roles || item.roles.includes(role)
+  );
+
+  const [expandedId, setExpandedId] = useState<string | null>(() => {
+    const matched = ACTIVE_SIDEBAR_MENUS.find(
+      (item) => item.children?.length && pathname === item.href
+    );
+    return matched?.id ?? null;
   });
 
   useEffect(() => {
-    ACTIVE_SIDEBAR_MENUS.forEach((item) => {
-      if (item.children?.length && pathname === item.href) {
-        setExpandedIds((prev) => (prev[item.id] ? prev : { ...prev, [item.id]: true }));
-      }
-    });
+    const matched = ACTIVE_SIDEBAR_MENUS.find(
+      (item) => item.children?.length && pathname === item.href
+    );
+    setExpandedId(matched?.id ?? null);
   }, [pathname]);
 
   const toggleGroup = (id: string) => {
-    setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }));
+    setExpandedId((prev) => (prev === id ? null : id));
   };
 
-  return (
-    <ul className="space-y-1.5">
-      {ACTIVE_SIDEBAR_MENUS.map((item) => {
-        const hasChildren = Boolean(item.children?.length);
-        const isCurrentRoute =
-          pathname === item.href || (item.href === "/dashboard" && pathname === "/");
-        const isExpanded = Boolean(expandedIds[item.id]);
+  const sections = visibleMenus.reduce<
+    { sectionName: string; items: SidebarMenuItem[] }[]
+  >((acc, item) => {
+    const name = item.section ?? "เมนูหลัก";
+    const existing = acc.find((s) => s.sectionName === name);
+    if (existing) {
+      existing.items.push(item);
+    } else {
+      acc.push({ sectionName: name, items: [item] });
+    }
+    return acc;
+  }, []);
 
-        if (hasChildren && !collapsed) {
-          return (
-            <li key={item.id}>
-              <button
-                type="button"
-                onClick={() => toggleGroup(item.id)}
-                className={`group flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3 text-[15px] transition-all ${
-                  isCurrentRoute
-                    ? "bg-slate-800/90 font-semibold text-white ring-1 ring-slate-700/80"
-                    : "font-normal text-slate-300 hover:bg-slate-800/60 hover:text-white"
-                }`}
-              >
-                <span className="flex min-w-0 items-center gap-3.5">
-                  <MenuIcon icon={item.icon} active={false} softActive={isCurrentRoute} />
-                  <span className="truncate">{item.label}</span>
-                </span>
+  return (
+    <div className="space-y-5">
+      {sections.map((sec, secIdx) => (
+        <div key={sec.sectionName}>
+          {!collapsed ? (
+            <div className="mb-2 flex items-center gap-2 px-3">
+              <span className="text-[11px] font-semibold tracking-wider text-slate-400">
+                {sec.sectionName}
+              </span>
+              <span className="h-px flex-1 bg-slate-800/90" aria-hidden="true" />
+            </div>
+          ) : (
+            secIdx > 0 && <div className="mx-2 my-2 h-px bg-slate-800" aria-hidden="true" />
+          )}
+
+          <ul className="space-y-1">
+            {sec.items.map((item) => {
+              const hasChildren = Boolean(item.children?.length);
+              const isCurrentRoute =
+                pathname === item.href || (item.href === "/dashboard" && pathname === "/");
+              const isExpanded = expandedId === item.id;
+
+              if (hasChildren && !collapsed) {
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      onClick={() => toggleGroup(item.id)}
+                      className={`group flex w-full cursor-pointer items-center justify-between rounded-xl px-3.5 py-2.5 text-[14px] transition-all ${
+                        isCurrentRoute
+                          ? "bg-slate-800/90 font-semibold text-white ring-1 ring-slate-700/80"
+                          : "font-normal text-slate-300 hover:bg-slate-800/60 hover:text-white"
+                      }`}
+                    >
+                      <span className="flex min-w-0 items-center gap-3">
+                        <MenuIcon icon={item.icon} active={false} softActive={isCurrentRoute} />
+                        <span className="truncate">{item.label}</span>
+                      </span>
                 {isExpanded ? (
                   <ChevronUp
                     className={`h-4 w-4 shrink-0 ${
@@ -221,27 +244,30 @@ function SidebarNavList({
           );
         }
 
-        return (
-          <li key={item.id}>
-            <Link
-              href={item.href}
-              title={collapsed ? `${item.label} (${item.labelEn})` : undefined}
-              onClick={() => isMobile && onNavigate()}
-              className={`group flex items-center rounded-xl py-3 text-[15px] transition-all ${
-                collapsed ? "justify-center px-2.5" : "gap-3.5 px-4"
-              } ${
-                isCurrentRoute
-                  ? "bg-[#2563EB] font-medium text-white shadow-[0_8px_18px_-4px_rgba(37,99,235,0.5)]"
-                  : "font-normal text-slate-300 hover:bg-slate-800/60 hover:text-white"
-              }`}
-            >
-              <MenuIcon icon={item.icon} active={isCurrentRoute} />
-              {!collapsed && <span className="truncate">{item.label}</span>}
-            </Link>
-          </li>
-        );
-      })}
-    </ul>
+              return (
+                <li key={item.id}>
+                  <Link
+                    href={item.href}
+                    title={collapsed ? `${item.label} (${item.labelEn})` : undefined}
+                    onClick={() => isMobile && onNavigate()}
+                    className={`group flex items-center rounded-xl py-2.5 text-[14px] transition-all ${
+                      collapsed ? "justify-center px-2.5" : "gap-3 px-3.5"
+                    } ${
+                      isCurrentRoute
+                        ? "bg-[#2563EB] font-medium text-white shadow-[0_8px_18px_-4px_rgba(37,99,235,0.5)]"
+                        : "font-normal text-slate-300 hover:bg-slate-800/60 hover:text-white"
+                    }`}
+                  >
+                    <MenuIcon icon={item.icon} active={isCurrentRoute} />
+                    {!collapsed && <span className="truncate">{item.label}</span>}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </div>
   );
 }
 

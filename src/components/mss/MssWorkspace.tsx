@@ -11,13 +11,8 @@ import {
   Users,
 } from "lucide-react";
 import { Card, InfoHint, Tooltip } from "@/components/ui";
-import {
-  INITIAL_MSS_APPROVALS,
-  INITIAL_MSS_TEAM,
-  MSS_MANAGER_PROFILE,
-  type MssTeamMember,
-  type MssTrainingApprovalItem,
-} from "@/data/mock/mssData";
+import { useDemoStore } from "@/context/DemoStoreContext";
+import { MSS_MANAGER_PROFILE } from "@/data/mock/mssData";
 import {
   MssTeamCompetencyPanel,
   MssTeamIdpPanel,
@@ -92,8 +87,16 @@ export function MssWorkspace() {
   const tabParam = searchParams.get("tab") as MssTabKey | null;
   const activeTab: MssTabKey = tabParam && VALID_TABS.includes(tabParam) ? tabParam : "team";
 
-  const [team, setTeam] = useState<MssTeamMember[]>(INITIAL_MSS_TEAM);
-  const [approvals, setApprovals] = useState<MssTrainingApprovalItem[]>(INITIAL_MSS_APPROVALS);
+  const {
+    mssTeam: team,
+    mssApprovals: approvals,
+    rateTeamMember,
+    boostTeamCompetency,
+    approveTeamIdp,
+    decideTrainingApproval,
+    nominateToTalentPool,
+    pushNotification,
+  } = useDemoStore();
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const notify = (msg: string) => {
@@ -192,24 +195,89 @@ export function MssWorkspace() {
       <Card className="p-6">
         {activeTab === "team" && <MssTeamOverviewPanel team={team} />}
         {activeTab === "performance" && (
-          <MssTeamPerformancePanel team={team} onChange={setTeam} onNotify={notify} />
+          <MssTeamPerformancePanel
+            team={team}
+            onChange={(nextTeam) => {
+              nextTeam.forEach((m) => {
+                const prev = team.find((p) => p.id === m.id);
+                if (prev && prev.managerScore !== m.managerScore && m.managerScore !== null) {
+                  rateTeamMember(m.id, m.managerScore);
+                }
+              });
+            }}
+            onNotify={notify}
+          />
         )}
         {activeTab === "competency" && (
-          <MssTeamCompetencyPanel team={team} onChange={setTeam} onNotify={notify} />
+          <MssTeamCompetencyPanel
+            team={team}
+            onChange={(nextTeam) => {
+              nextTeam.forEach((m) => {
+                const prev = team.find((p) => p.id === m.id);
+                if (prev && prev.skillReadiness !== m.skillReadiness) {
+                  boostTeamCompetency(m.id);
+                }
+              });
+            }}
+            onNotify={notify}
+          />
         )}
         {activeTab === "idp" && (
-          <MssTeamIdpPanel team={team} onChange={setTeam} onNotify={notify} />
+          <MssTeamIdpPanel
+            team={team}
+            onChange={(nextTeam) => {
+              nextTeam.forEach((m) => {
+                const prev = team.find((p) => p.id === m.id);
+                if (prev && prev.idpStatus !== m.idpStatus && m.idpStatus === "approved") {
+                  approveTeamIdp(m.id);
+                }
+              });
+            }}
+            onNotify={notify}
+          />
         )}
         {activeTab === "approvals" && (
           <MssTrainingApprovalsPanel
             items={approvals}
-            onChange={setApprovals}
+            onChange={(nextApprovals) => {
+              nextApprovals.forEach((a) => {
+                const prev = approvals.find((p) => p.id === a.id);
+                if (prev && prev.status !== a.status && a.status !== "pending") {
+                  decideTrainingApproval(a.id, a.status);
+                }
+              });
+            }}
             onNotify={notify}
           />
         )}
-        {activeTab === "lms" && <MssTeamLmsPanel team={team} onNotify={notify} />}
+        {activeTab === "lms" && (
+          <MssTeamLmsPanel
+            team={team}
+            onNotify={(msg) => {
+              pushNotification({
+                title: "แจ้งเตือนเรียนคอร์ส LMS จากหัวหน้างาน",
+                message: msg,
+                category: "training",
+                href: "/ess?tab=lms",
+                targetRoles: ["employee"],
+              });
+              notify(msg);
+            }}
+          />
+        )}
         {activeTab === "talent" && (
-          <MssTeamTalentPanel team={team} onChange={setTeam} onNotify={notify} />
+          <MssTeamTalentPanel
+            team={team}
+            onChange={(nextTeam) => {
+              nextTeam.forEach((m) => {
+                const prev = team.find((p) => p.id === m.id);
+                if (prev && !prev.talentNominated && m.talentNominated) {
+                  nominateToTalentPool(m.id);
+                }
+              });
+            }}
+            onNotify={notify}
+          />
         )}
       </Card>
     </div>

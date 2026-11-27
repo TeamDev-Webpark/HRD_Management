@@ -4,22 +4,32 @@ import type { DemoUser, NotificationItem, RoleKey, SidebarMenuItem } from "@/typ
  * Incremental Sidebar Menu:
  * แสดงเฉพาะเมนูที่พัฒนาเสร็จแล้วเท่านั้น และจะค่อยๆ เพิ่มโมดูลใหม่ทีละ Step
  */
+export const ROLE_HOME_ROUTE: Record<RoleKey, string> = {
+  admin: "/dashboard",
+  manager: "/mss",
+  employee: "/ess",
+};
+
 export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-dashboard",
     moduleCode: "01",
+    section: "ภาพรวม",
     label: "แดชบอร์ด HRD",
     labelEn: "HRD Dashboard",
     href: "/dashboard",
     icon: "dashboard",
+    roles: ["admin", "manager"],
   },
   {
     id: "hrd-performance",
     moduleCode: "02",
-    label: "ประเมินผลการปฏิบัติงาน",
+    section: "พัฒนาและประเมินบุคลากร",
+    label: "ประเมินผลงาน (PMS)",
     labelEn: "Performance (PMS)",
     href: "/performance",
     icon: "performance",
+    roles: ["admin", "manager"],
     children: [
       { id: "pms-cycles", label: "รอบการประเมินผล", href: "/performance?tab=cycles", tabKey: "cycles", group: "ตั้งค่าและเป้าหมาย" },
       { id: "pms-templates", label: "แบบฟอร์มและเกณฑ์ประเมิน", href: "/performance?tab=templates", tabKey: "templates", group: "ตั้งค่าและเป้าหมาย" },
@@ -34,10 +44,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-training",
     moduleCode: "03",
+    section: "พัฒนาและประเมินบุคลากร",
     label: "การจัดการฝึกอบรม",
     labelEn: "Training Management",
     href: "/training",
     icon: "training",
+    roles: ["admin", "manager"],
     children: [
       { id: "trn-needs", label: "สำรวจความต้องการอบรม", href: "/training?tab=needs", tabKey: "needs", group: "วางแผนและหลักสูตร" },
       { id: "trn-catalog", label: "คลังหลักสูตร", href: "/training?tab=catalog", tabKey: "catalog", group: "วางแผนและหลักสูตร" },
@@ -53,10 +65,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-lms",
     moduleCode: "04",
+    section: "พัฒนาและประเมินบุคลากร",
     label: "ระบบเรียนรู้ออนไลน์",
     labelEn: "LMS",
     href: "/lms",
     icon: "lms",
+    roles: ["admin", "manager", "employee"],
     children: [
       { id: "lms-courses", label: "ห้องเรียนออนไลน์", href: "/lms?tab=courses", tabKey: "courses", group: "คอร์สและสื่อการเรียน" },
       { id: "lms-lessons", label: "จัดการบทเรียน", href: "/lms?tab=lessons", tabKey: "lessons", group: "คอร์สและสื่อการเรียน" },
@@ -70,10 +84,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-competency",
     moduleCode: "05",
+    section: "พัฒนาและประเมินบุคลากร",
     label: "สมรรถนะและทักษะ",
     labelEn: "Competency & Skill",
     href: "/competency",
     icon: "competency",
+    roles: ["admin", "manager"],
     children: [
       { id: "cmp-dictionary", label: "คลังสมรรถนะ", href: "/competency?tab=dictionary", tabKey: "dictionary", group: "กรอบสมรรถนะและประเมินผล" },
       { id: "cmp-positions", label: "สมรรถนะประจำตำแหน่ง", href: "/competency?tab=positions", tabKey: "positions", group: "กรอบสมรรถนะและประเมินผล" },
@@ -86,10 +102,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-idp",
     moduleCode: "06",
+    section: "พัฒนาและประเมินบุคลากร",
     label: "แผนพัฒนารายบุคคล",
     labelEn: "IDP",
     href: "/idp",
     icon: "idp",
+    roles: ["admin", "manager"],
     children: [
       { id: "idp-plans", label: "แผน IDP รายบุคคล", href: "/idp?tab=plans", tabKey: "plans", group: "วางแผนและกิจกรรม" },
       { id: "idp-activities", label: "กิจกรรมพัฒนา 70-20-10", href: "/idp?tab=activities", tabKey: "activities", group: "วางแผนและกิจกรรม" },
@@ -100,10 +118,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-career",
     moduleCode: "07",
+    section: "พัฒนาและประเมินบุคลากร",
     label: "เส้นทางสายอาชีพ",
     labelEn: "Career Path",
     href: "/career",
     icon: "career",
+    roles: ["admin", "manager"],
     children: [
       { id: "car-families", label: "กลุ่มสายงาน (Job Family)", href: "/career?tab=families", tabKey: "families", group: "โครงสร้างสายอาชีพ" },
       { id: "car-paths", label: "เส้นทางความก้าวหน้า", href: "/career?tab=paths", tabKey: "paths", group: "โครงสร้างสายอาชีพ" },
@@ -114,10 +134,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-talent",
     moduleCode: "08",
+    section: "พัฒนาและประเมินบุคลากร",
     label: "Talent และผู้สืบทอด",
     labelEn: "Talent & Succession",
     href: "/talent",
     icon: "talent",
+    roles: ["admin", "manager"],
     children: [
       { id: "tlt-pool", label: "ทะเบียน Talent Pool", href: "/talent?tab=pool", tabKey: "pool", group: "บริหารกลุ่ม Talent" },
       { id: "tlt-potential", label: "ประเมินศักยภาพ", href: "/talent?tab=potential", tabKey: "potential", group: "บริหารกลุ่ม Talent" },
@@ -132,10 +154,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-reports",
     moduleCode: "09",
+    section: "รายงานและระบบ",
     label: "รายงาน HRD",
     labelEn: "HRD Reports",
     href: "/reports",
     icon: "reports",
+    roles: ["admin", "manager"],
     children: [
       { id: "rep-perf", label: "รายงานผลประเมินผลงาน", href: "/reports?tab=performance", tabKey: "performance", group: "รายงานผลงานและการอบรม" },
       { id: "rep-trn", label: "รายงานสรุปการฝึกอบรม", href: "/reports?tab=training", tabKey: "training", group: "รายงานผลงานและการอบรม" },
@@ -150,10 +174,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-roles",
     moduleCode: "10",
+    section: "รายงานและระบบ",
     label: "บทบาทและสิทธิ์ (RBAC)",
     labelEn: "Role & Permission",
     href: "/roles",
     icon: "roles",
+    roles: ["admin"],
     children: [
       { id: "rbac-roles", label: "จัดการบทบาท (Roles)", href: "/roles?tab=roles", tabKey: "roles", group: "สิทธิ์และความปลอดภัย" },
       { id: "rbac-matrix", label: "ตารางสิทธิ์ (6 Actions)", href: "/roles?tab=matrix", tabKey: "matrix", group: "สิทธิ์และความปลอดภัย" },
@@ -164,10 +190,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-ess",
     moduleCode: "ESS",
-    label: "บริการตนเองพนักงาน",
+    section: "บริการตนเอง",
+    label: "บริการพนักงาน (ESS)",
     labelEn: "Employee Self-Service",
     href: "/ess",
     icon: "ess",
+    roles: ["admin", "employee"],
     children: [
       { id: "ess-overview", label: "ภาพรวมของฉัน", href: "/ess?tab=overview", tabKey: "overview", group: "ผลงานและแผนพัฒนา" },
       { id: "ess-perf", label: "เป้าหมายและผลประเมิน", href: "/ess?tab=performance", tabKey: "performance", group: "ผลงานและแผนพัฒนา" },
@@ -182,10 +210,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-mss",
     moduleCode: "MSS",
-    label: "บริการตนเองหัวหน้างาน",
+    section: "บริการตนเอง",
+    label: "บริการหัวหน้างาน (MSS)",
     labelEn: "Manager Self-Service",
     href: "/mss",
     icon: "mss",
+    roles: ["admin", "manager"],
     children: [
       { id: "mss-team", label: "ภาพรวมทีมของฉัน", href: "/mss?tab=team", tabKey: "team", group: "ทีมงานและผลงาน" },
       { id: "mss-perf", label: "ประเมินผลงานทีม", href: "/mss?tab=performance", tabKey: "performance", group: "ทีมงานและผลงาน" },
@@ -199,10 +229,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-hrm",
     moduleCode: "HRM",
-    label: "ข้อมูลอ้างอิงจาก HRM",
+    section: "รายงานและระบบ",
+    label: "ข้อมูลอ้างอิง HRM",
     labelEn: "HRM Shared Views",
     href: "/hrm-reference",
     icon: "hrm",
+    roles: ["admin"],
     children: [
       { id: "hrm-emp", label: "ทะเบียนพนักงาน (Read-Only)", href: "/hrm-reference?tab=employees", tabKey: "employees", group: "ข้อมูลเชื่อมโยง HRM" },
       { id: "hrm-dept", label: "โครงสร้างองค์กรและแผนก", href: "/hrm-reference?tab=departments", tabKey: "departments", group: "ข้อมูลเชื่อมโยง HRM" },
@@ -212,17 +244,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
   {
     id: "hrd-settings",
     moduleCode: "10",
+    section: "รายงานและระบบ",
     label: "ตั้งค่าระบบ HRD",
     labelEn: "HRD Settings",
     href: "/settings",
     icon: "settings",
-  },
-  {
-    id: "ui-kit",
-    label: "UI Kit & Design System",
-    labelEn: "Component Preview",
-    href: "/ui-kit",
-    icon: "palette",
+    roles: ["admin"],
   },
 ];
 
@@ -285,6 +312,7 @@ export const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     timestamp: "10 นาทีที่แล้ว",
     category: "approval",
     read: false,
+    href: "/training?tab=enrollments",
   },
   {
     id: "NOTI-002",
@@ -293,6 +321,7 @@ export const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     timestamp: "1 ชั่วโมงที่แล้ว",
     category: "performance",
     read: false,
+    href: "/performance?tab=checkins",
   },
   {
     id: "NOTI-003",
@@ -301,13 +330,15 @@ export const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     timestamp: "เมื่อวานนี้",
     category: "training",
     read: true,
+    href: "/training?tab=sessions",
   },
   {
     id: "NOTI-004",
     title: "ซิงค์ข้อมูลพนักงานจาก HRM สำเร็จ",
-    message: "อัปเดตทะเบียนพนักงาน 482 คน และ 12 แผนกเรียบร้อยแล้ว (Mock Sync)",
+    message: "อัปเดตทะเบียนพนักงาน 418 คน และ 5 แผนกเรียบร้อยแล้ว (Mock Sync)",
     timestamp: "2 วันที่แล้ว",
     category: "system",
     read: true,
+    href: "/hrm-reference?tab=employees",
   },
 ];

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_Thai } from "next/font/google";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { DemoStoreProvider } from "@/context/DemoStoreContext";
 import { LayoutProvider } from "@/context/LayoutContext";
 import "./globals.css";
 
@@ -35,9 +36,11 @@ export default function RootLayout({
   return (
     <html lang="th" className={`${notoSansThai.variable} ${inter.variable}`}>
       <body className="min-h-screen bg-[#F8FAFC] text-[#1E293B] antialiased">
-        <LayoutProvider>
-          <MainLayout>{children}</MainLayout>
-        </LayoutProvider>
+        <DemoStoreProvider>
+          <LayoutProvider>
+            <MainLayout>{children}</MainLayout>
+          </LayoutProvider>
+        </DemoStoreProvider>
       </body>
     </html>
   );

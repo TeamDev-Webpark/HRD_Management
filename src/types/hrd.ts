@@ -22,6 +22,8 @@ export interface NotificationItem {
   timestamp: string;
   category: "approval" | "training" | "performance" | "system";
   read: boolean;
+  href?: string;
+  targetRoles?: RoleKey[];
 }
 
 export interface SidebarSubMenuItem {
@@ -39,6 +41,8 @@ export interface SidebarMenuItem {
   href: string;
   icon: "dashboard" | "performance" | "training" | "lms" | "competency" | "idp" | "career" | "talent" | "reports" | "roles" | "ess" | "mss" | "hrm" | "settings" | "palette";
   moduleCode?: string;
+  section?: string;
+  roles?: RoleKey[];
   children?: SidebarSubMenuItem[];
 }
 

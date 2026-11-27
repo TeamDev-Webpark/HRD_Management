@@ -33,27 +33,13 @@ import {
 
 export function EssTrainingPanel({
   items,
-  onChange,
-  onNotify,
+  onEnroll,
 }: {
   items: EssTrainingItem[];
-  onChange: (items: EssTrainingItem[]) => void;
-  onNotify: (msg: string) => void;
+  onEnroll: (trainingId: string, courseName: string) => void;
 }) {
   const handleEnroll = (item: EssTrainingItem) => {
-    onChange(
-      items.map((row) =>
-        row.id === item.id
-          ? {
-              ...row,
-              enrolled: true,
-              seatsLeft: Math.max(0, row.seatsLeft - 1),
-              approvalStatus: "pending",
-            }
-          : row
-      )
-    );
-    onNotify(`ส่งคำขอลงทะเบียนหลักสูตร "${item.courseName}" ให้หัวหน้างานอนุมัติแล้ว`);
+    onEnroll(item.id, item.courseName);
   };
 
   return (
