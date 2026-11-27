@@ -232,7 +232,7 @@ export function PositionCompetencyPanel({
                 options={POSITION_OPTIONS}
               />
               <Select
-                label="เลือกสมรรถนะจากพจนานุกรม"
+                label="เลือกสมรรถนะจากคลัง"
                 value={formCompCode}
                 onChange={setFormCompCode}
                 options={dictionary.map((d) => ({ value: d.code, label: `${d.code} — ${d.name}` }))}

@@ -31,7 +31,7 @@
 
 ## Phase 4: Competency, IDP & Career Path (ทักษะ แผนพัฒนา และสายอาชีพ)
 - [x] **4.1 Module 05 – Competency Framework** — Competency Dictionary, Position Competency, Competency Assessment
-- [ ] **4.2 Module 05 – Skill Analytics** — Skill Matrix, Skill Gap Analysis, Skill Certification History
+- [x] **4.2 Module 05 – Skill Analytics** — Skill Matrix, Skill Gap Analysis, Skill Certification History
 - [ ] **4.3 Module 06 – Individual Development Plan** — Employee IDP, Activities, Progress Tracking, Evaluation
 - [ ] **4.4 Module 07 – Career Path** — Job Family, Career Path, Career Requirements, Employee Career Plan
 

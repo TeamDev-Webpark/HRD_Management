@@ -4,10 +4,13 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   AlertTriangle,
+  Award,
   BookOpenCheck,
   Briefcase,
   CheckCircle2,
   ClipboardCheck,
+  Clock,
+  Grid2x2,
   Layers,
   ShieldAlert,
   Sparkles,
@@ -23,17 +26,42 @@ import {
   type CompetencyDictItem,
   type PositionCompetencyItem,
 } from "@/data/mock/competencyFramework";
+import {
+  INITIAL_SKILL_CERTIFICATIONS,
+  INITIAL_SKILL_GAPS,
+  INITIAL_SKILL_MATRIX,
+  SKILL_COLUMNS,
+  type SkillCertificationItem,
+  type SkillGapItem,
+  type SkillMatrixRow,
+} from "@/data/mock/skillAnalytics";
 import { CompetencyDictionaryPanel } from "./CompetencyDictionaryPanel";
 import { PositionCompetencyPanel } from "./PositionCompetencyPanel";
 import { CompetencyAssessmentPanel } from "./CompetencyAssessmentPanel";
+import { SkillMatrixPanel } from "./SkillMatrixPanel";
+import { SkillGapPanel } from "./SkillGapPanel";
+import { SkillCertificationPanel } from "./SkillCertificationPanel";
 
-type CompetencyTabKey = "dictionary" | "positions" | "assessments";
+type CompetencyTabKey =
+  | "dictionary"
+  | "positions"
+  | "assessments"
+  | "matrix"
+  | "gap"
+  | "certifications";
 
-const VALID_TABS: CompetencyTabKey[] = ["dictionary", "positions", "assessments"];
+const VALID_TABS: CompetencyTabKey[] = [
+  "dictionary",
+  "positions",
+  "assessments",
+  "matrix",
+  "gap",
+  "certifications",
+];
 
 const TAB_META: Record<CompetencyTabKey, { title: string; subtitle: string; hint: string }> = {
   dictionary: {
-    title: "พจนานุกรมสมรรถนะ (Competency Dictionary)",
+    title: "คลังสมรรถนะ (Competency Library)",
     subtitle: "กำหนดคลังสมรรถนะกลางขององค์กร แบ่งตาม Core, Managerial และ Functional พร้อมระดับความชำนาญ",
     hint: "คลังสมรรถนะกลางใช้เป็นมาตรฐานในการผูกเข้ากับตำแหน่งงาน การประเมิน และแผนพัฒนา IDP",
   },
@@ -46,6 +74,21 @@ const TAB_META: Record<CompetencyTabKey, { title: string; subtitle: string; hint
     title: "การประเมินสมรรถนะ (Competency Assessment)",
     subtitle: "บันทึกผลประเมินสมรรถนะรายบุคคล เปรียบเทียบระดับเป้าหมายกับระดับจริงเพื่อค้นหา Skill Gap",
     hint: "ผลต่างติดลบ (Gap) จะถูกนำไปใช้วิเคราะห์ Skill Gap และแนะนำหลักสูตรพัฒนาในขั้นถัดไป",
+  },
+  matrix: {
+    title: "ตารางทักษะองค์กร (Skill Matrix)",
+    subtitle: "มุมมองภาพรวมทักษะของพนักงานแต่ละคนเทียบกับเป้าหมายตำแหน่ง สามารถคลิกที่ช่องระดับเพื่อปรับปรุงข้อมูลได้ทันที",
+    hint: "สีเขียว = ผ่านเกณฑ์, สีน้ำเงิน = สูงกว่าเกณฑ์, สีแดง = มีช่องว่างทักษะที่ต้องพัฒนา",
+  },
+  gap: {
+    title: "วิเคราะห์ช่องว่างทักษะ (Skill Gap Analysis)",
+    subtitle: "จัดลำดับความสำคัญของช่องว่างทักษะ พร้อมหลักสูตรแนะนำและส่งต่อไปยังแผนพัฒนารายบุคคล (IDP)",
+    hint: "คลิก 'ส่งเข้า IDP' เพื่อเชื่อมโยงช่องว่างทักษะเข้าสู่แผนพัฒนาของพนักงาน",
+  },
+  certifications: {
+    title: "ประวัติใบรับรองทักษะ (Skill Certification History)",
+    subtitle: "จัดเก็บทะเบียนใบรับรองวิชาชีพและทักษะเฉพาะทาง พร้อมแจ้งเตือนใบรับรองใกล้หมดอายุและบันทึกการต่ออายุ",
+    hint: "รองรับการเพิ่มใบรับรองใหม่และกดต่ออายุสำหรับใบรับรองที่ใกล้หมดอายุหรือหมดอายุแล้ว",
   },
 };
 
@@ -62,6 +105,11 @@ export function CompetencyWorkspace() {
   const [assessments, setAssessments] = useState<CompetencyAssessmentItem[]>(
     INITIAL_COMPETENCY_ASSESSMENTS
   );
+  const [skillMatrix, setSkillMatrix] = useState<SkillMatrixRow[]>(INITIAL_SKILL_MATRIX);
+  const [skillGaps, setSkillGaps] = useState<SkillGapItem[]>(INITIAL_SKILL_GAPS);
+  const [certifications, setCertifications] = useState<SkillCertificationItem[]>(
+    INITIAL_SKILL_CERTIFICATIONS
+  );
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const notify = (msg: string) => {
@@ -72,6 +120,127 @@ export function CompetencyWorkspace() {
   };
 
   const kpiCards = useMemo(() => {
+    if (activeTab === "matrix") {
+      let totalCells = 0;
+      let metCells = 0;
+      let exceedCells = 0;
+      let gapCells = 0;
+      skillMatrix.forEach((row) => {
+        SKILL_COLUMNS.forEach((col) => {
+          const cell = row.skills[col.key];
+          if (!cell) return;
+          totalCells += 1;
+          if (cell.actual >= cell.target) metCells += 1;
+          if (cell.actual > cell.target) exceedCells += 1;
+          if (cell.actual < cell.target) gapCells += 1;
+        });
+      });
+      const readinessRate = totalCells > 0 ? Math.round((metCells / totalCells) * 100) : 0;
+      return [
+        {
+          label: "พนักงานใน Skill Matrix",
+          value: `${skillMatrix.length} คน`,
+          sub: `ติดตาม ${SKILL_COLUMNS.length} ทักษะหลักขององค์กร`,
+          icon: <Grid2x2 className="h-5 w-5" />,
+          color: "bg-[#EEF4FF] text-[#2563EB]",
+        },
+        {
+          label: "อัตราความพร้อมรวม",
+          value: `${readinessRate}%`,
+          sub: `ผ่านเกณฑ์ ${metCells} จาก ${totalCells} ช่องทักษะ`,
+          icon: <CheckCircle2 className="h-5 w-5" />,
+          color: "bg-[#DCFCE7] text-[#16A34A]",
+        },
+        {
+          label: "ทักษะที่ยังมี Gap",
+          value: `${gapCells} ช่อง`,
+          sub: "ต่ำกว่าระดับเป้าหมายตำแหน่ง",
+          icon: <AlertTriangle className="h-5 w-5" />,
+          color: "bg-[#FEF3C7] text-[#D97706]",
+        },
+        {
+          label: "ทักษะสูงกว่าเกณฑ์",
+          value: `${exceedCells} ช่อง`,
+          sub: "มีศักยภาพเป็น Mentor / วิทยากร",
+          icon: <Sparkles className="h-5 w-5" />,
+          color: "bg-[#F3E8FF] text-[#7C3AED]",
+        },
+      ];
+    }
+
+    if (activeTab === "gap") {
+      const openCount = skillGaps.filter((g) => g.status === "open").length;
+      const inIdpCount = skillGaps.filter((g) => g.status === "in-idp").length;
+      const closedCount = skillGaps.filter((g) => g.status === "closed").length;
+      const highPriority = skillGaps.filter((g) => g.priority === "high" && g.status !== "closed").length;
+      return [
+        {
+          label: "ช่องว่างทักษะทั้งหมด",
+          value: `${skillGaps.length} รายการ`,
+          sub: `รอวางแผนพัฒนา ${openCount} รายการ`,
+          icon: <AlertTriangle className="h-5 w-5" />,
+          color: "bg-[#EEF4FF] text-[#2563EB]",
+        },
+        {
+          label: "ระดับเร่งด่วน (High)",
+          value: `${highPriority} รายการ`,
+          sub: "ควรบรรจุเข้าแผนพัฒนาทันที",
+          icon: <ShieldAlert className="h-5 w-5" />,
+          color: "bg-[#FEF3C7] text-[#D97706]",
+        },
+        {
+          label: "ส่งเข้าแผน IDP แล้ว",
+          value: `${inIdpCount} รายการ`,
+          sub: "อยู่ระหว่างติดตามการพัฒนา",
+          icon: <TrendingUp className="h-5 w-5" />,
+          color: "bg-[#F3E8FF] text-[#7C3AED]",
+        },
+        {
+          label: "ปิด Gap สำเร็จ",
+          value: `${closedCount} รายการ`,
+          sub: "ผ่านเกณฑ์ระดับเป้าหมายแล้ว",
+          icon: <CheckCircle2 className="h-5 w-5" />,
+          color: "bg-[#DCFCE7] text-[#16A34A]",
+        },
+      ];
+    }
+
+    if (activeTab === "certifications") {
+      const validCount = certifications.filter((c) => c.status === "valid").length;
+      const expiringCount = certifications.filter((c) => c.status === "expiring").length;
+      const expiredCount = certifications.filter((c) => c.status === "expired").length;
+      return [
+        {
+          label: "ใบรับรองทั้งหมด",
+          value: `${certifications.length} รายการ`,
+          sub: "บันทึกในทะเบียนประวัติทักษะ",
+          icon: <Award className="h-5 w-5" />,
+          color: "bg-[#EEF4FF] text-[#2563EB]",
+        },
+        {
+          label: "ใบรับรองที่ใช้งานได้",
+          value: `${validCount} รายการ`,
+          sub: "ยังไม่หมดอายุและยืนยันแล้ว",
+          icon: <CheckCircle2 className="h-5 w-5" />,
+          color: "bg-[#DCFCE7] text-[#16A34A]",
+        },
+        {
+          label: "ใกล้หมดอายุ",
+          value: `${expiringCount} รายการ`,
+          sub: "ควรวางแผนต่ออายุล่วงหน้า",
+          icon: <Clock className="h-5 w-5" />,
+          color: "bg-[#FEF3C7] text-[#D97706]",
+        },
+        {
+          label: "หมดอายุแล้ว",
+          value: `${expiredCount} รายการ`,
+          sub: "รอการสอบต่ออายุ (Renewal)",
+          icon: <ShieldAlert className="h-5 w-5" />,
+          color: "bg-[#F3E8FF] text-[#7C3AED]",
+        },
+      ];
+    }
+
     if (activeTab === "positions") {
       const uniquePositions = new Set(positions.map((p) => p.positionId)).size;
       const criticalCount = positions.filter((p) => p.critical).length;
@@ -190,7 +359,7 @@ export function CompetencyWorkspace() {
         color: "bg-[#F3E8FF] text-[#7C3AED]",
       },
     ];
-  }, [activeTab, dictionary, positions, assessments]);
+  }, [activeTab, dictionary, positions, assessments, skillMatrix, skillGaps, certifications]);
 
   const meta = TAB_META[activeTab];
 
@@ -251,6 +420,27 @@ export function CompetencyWorkspace() {
           <CompetencyAssessmentPanel
             items={assessments}
             onChange={setAssessments}
+            onNotify={notify}
+          />
+        )}
+        {activeTab === "matrix" && (
+          <SkillMatrixPanel
+            rows={skillMatrix}
+            onChange={setSkillMatrix}
+            onNotify={notify}
+          />
+        )}
+        {activeTab === "gap" && (
+          <SkillGapPanel
+            items={skillGaps}
+            onChange={setSkillGaps}
+            onNotify={notify}
+          />
+        )}
+        {activeTab === "certifications" && (
+          <SkillCertificationPanel
+            items={certifications}
+            onChange={setCertifications}
             onNotify={notify}
           />
         )}

@@ -244,14 +244,17 @@ export function Sidebar() {
             <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-xs">
               <img
                 src="/logo.png"
-                alt="HRD Logo"
+                alt="HRD Management Logo"
                 className="h-full w-full object-contain"
               />
             </div>
             {!collapsed && (
-              <span className="truncate text-lg font-bold tracking-wide text-white">
-                HRD
-              </span>
+              <div className="min-w-0 leading-tight">
+                <div className="text-[16px] font-bold tracking-wide text-white">HRD</div>
+                <div className="text-[13px] font-medium tracking-wide text-slate-300">
+                  Management
+                </div>
+              </div>
             )}
           </Link>
 

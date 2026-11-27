@@ -19,7 +19,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "HRD | ระบบบริหารและพัฒนาทรัพยากรบุคคล",
+  title: "HRD Management | ระบบบริหารและพัฒนาทรัพยากรบุคคล",
   description:
     "ระบบบริหารและพัฒนาทรัพยากรบุคคล (Human Resource Development) สำหรับองค์กร",
   icons: {

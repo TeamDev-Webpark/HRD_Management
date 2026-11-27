@@ -109,13 +109,13 @@ export function LoginView() {
               <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5 shadow-xs ring-1 ring-[#EEF2F6]">
                 <img
                   src="/logo.png"
-                  alt="HRD Logo"
+                  alt="HRD Management Logo"
                   className="h-full w-full object-contain"
                 />
               </div>
               <div>
-                <span className="text-xl font-bold tracking-wide text-[#1E293B]">
-                  HRD
+                <span className="text-xl font-bold tracking-tight text-[#1E293B]">
+                  HRD Management
                 </span>
                 <p className="text-[11px] font-medium text-[#64748B]">Enterprise People Dev</p>
               </div>
@@ -180,11 +180,11 @@ export function LoginView() {
             <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-xs ring-1 ring-[#EEF2F6]">
               <img
                 src="/logo.png"
-                alt="HRD Logo"
+                alt="HRD Management Logo"
                 className="h-full w-full object-contain"
               />
             </div>
-            <span className="text-lg font-bold text-[#1E293B]">HRD</span>
+            <span className="text-lg font-bold text-[#1E293B]">HRD Management</span>
           </div>
 
           <div>

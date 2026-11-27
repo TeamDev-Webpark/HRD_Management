@@ -127,7 +127,7 @@ export function CompetencyDictionaryPanel({
       };
       onChange([created, ...items]);
       setPage(1);
-      onNotify(`เพิ่มสมรรถนะ "${created.name}" เข้าพจนานุกรมแล้ว`);
+      onNotify(`เพิ่มสมรรถนะ "${created.name}" เข้าคลังสมรรถนะแล้ว`);
     }
     setModalOpen(false);
   };
@@ -181,7 +181,7 @@ export function CompetencyDictionaryPanel({
       {paged.length === 0 ? (
         <EmptyState
           icon={<FolderOpen className="h-6 w-6" />}
-          title="ไม่พบสมรรถนะในพจนานุกรม"
+          title="ไม่พบสมรรถนะในคลัง"
           description="ลองปรับคำค้นหาหรือประเภทสมรรถนะ"
         />
       ) : (
@@ -281,7 +281,7 @@ export function CompetencyDictionaryPanel({
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={editingId ? "แก้ไขข้อมูลสมรรถนะ" : "เพิ่มสมรรถนะใหม่เข้าพจนานุกรม"}
+        title={editingId ? "แก้ไขข้อมูลสมรรถนะ" : "เพิ่มสมรรถนะใหม่เข้าคลัง"}
         footer={
           <>
             <Button variant="outline" onClick={() => setModalOpen(false)}>
@@ -345,7 +345,7 @@ export function CompetencyDictionaryPanel({
         }
       >
         <p className="text-sm text-[#334155]">
-          ต้องการลบสมรรถนะ <strong className="text-[#1E293B]">{deleteTarget?.name}</strong> ออกจากพจนานุกรมใช่หรือไม่?
+          ต้องการลบสมรรถนะ <strong className="text-[#1E293B]">{deleteTarget?.name}</strong> ออกจากคลังสมรรถนะใช่หรือไม่?
         </p>
       </Modal>
     </div>

@@ -75,9 +75,12 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
     href: "/competency",
     icon: "competency",
     children: [
-      { id: "cmp-dictionary", label: "พจนานุกรมสมรรถนะ", href: "/competency?tab=dictionary", tabKey: "dictionary", group: "กรอบสมรรถนะและประเมินผล" },
+      { id: "cmp-dictionary", label: "คลังสมรรถนะ", href: "/competency?tab=dictionary", tabKey: "dictionary", group: "กรอบสมรรถนะและประเมินผล" },
       { id: "cmp-positions", label: "สมรรถนะประจำตำแหน่ง", href: "/competency?tab=positions", tabKey: "positions", group: "กรอบสมรรถนะและประเมินผล" },
       { id: "cmp-assessments", label: "การประเมินสมรรถนะ", href: "/competency?tab=assessments", tabKey: "assessments", group: "กรอบสมรรถนะและประเมินผล" },
+      { id: "cmp-matrix", label: "ตารางทักษะ (Skill Matrix)", href: "/competency?tab=matrix", tabKey: "matrix", group: "วิเคราะห์ทักษะและใบรับรอง" },
+      { id: "cmp-gap", label: "วิเคราะห์ช่องว่างทักษะ", href: "/competency?tab=gap", tabKey: "gap", group: "วิเคราะห์ทักษะและใบรับรอง" },
+      { id: "cmp-certifications", label: "ประวัติใบรับรองทักษะ", href: "/competency?tab=certifications", tabKey: "certifications", group: "วิเคราะห์ทักษะและใบรับรอง" },
     ],
   },
   {
