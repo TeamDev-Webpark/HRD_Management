@@ -183,12 +183,32 @@ export function SkillGapPanel({ items, onChange, onNotify }: SkillGapPanelProps)
                       </Tooltip>
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={pMeta.variant}>{pMeta.label}</Badge>
+                      <Tooltip
+                        content={
+                          item.priority === "high"
+                            ? "ความสำคัญระดับสูง — กระทบงานหลัก ควรส่งเข้าแผน IDP ทันที"
+                            : item.priority === "medium"
+                              ? "ความสำคัญปานกลาง — วางแผนพัฒนาในรอบถัดไป"
+                              : "ความสำคัญทั่วไป — เสริมทักษะเพิ่มเติมตามโอกาส"
+                        }
+                      >
+                        <Badge variant={pMeta.variant}>{pMeta.label}</Badge>
+                      </Tooltip>
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={sMeta.variant} dot>
-                        {sMeta.label}
-                      </Badge>
+                      <Tooltip
+                        content={
+                          item.status === "open"
+                            ? "ยังไม่ได้ส่งเข้าแผนพัฒนารายบุคคล (IDP)"
+                            : item.status === "in-idp"
+                              ? "ส่งเข้าแผน IDP แล้ว อยู่ระหว่างการอบรม/พัฒนา"
+                              : "พนักงานพัฒนาทักษะผ่านเกณฑ์เป้าหมายแล้ว"
+                        }
+                      >
+                        <Badge variant={sMeta.variant} dot>
+                          {sMeta.label}
+                        </Badge>
+                      </Tooltip>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center justify-center">

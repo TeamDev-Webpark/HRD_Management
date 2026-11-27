@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
+  Award,
+  BarChart3,
   ChevronDown,
   ChevronUp,
   Compass,
@@ -45,6 +47,8 @@ function MenuIcon({
   if (icon === "competency") return <Layers className={cls} />;
   if (icon === "idp") return <TrendingUp className={cls} />;
   if (icon === "career") return <Compass className={cls} />;
+  if (icon === "talent") return <Award className={cls} />;
+  if (icon === "reports") return <BarChart3 className={cls} />;
   if (icon === "settings") return <Settings className={cls} />;
   if (icon === "palette") return <Palette className={cls} />;
   return <LayoutDashboard className={cls} />;
@@ -70,6 +74,8 @@ function SidebarNavList({
     "hrd-competency": pathname === "/competency",
     "hrd-idp": pathname === "/idp",
     "hrd-career": pathname === "/career",
+    "hrd-talent": pathname === "/talent",
+    "hrd-reports": pathname === "/reports",
   });
 
   useEffect(() => {

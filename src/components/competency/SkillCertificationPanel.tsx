@@ -207,9 +207,19 @@ export function SkillCertificationPanel({
                       <div className="text-[11px] text-[#94A3B8]">ออกเมื่อ {item.issueDate}</div>
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={sMeta.variant} dot>
-                        {sMeta.label}
-                      </Badge>
+                      <Tooltip
+                        content={
+                          item.status === "valid"
+                            ? `ใบรับรองใช้งานได้ปกติ ถึงวันที่ ${item.expiryDate}`
+                            : item.status === "expiring"
+                              ? `ใกล้หมดอายุ (${item.expiryDate}) ควรวางแผนต่ออายุล่วงหน้า`
+                              : `หมดอายุแล้วตั้งแต่ ${item.expiryDate} กรุณาดำเนินการต่ออายุ`
+                        }
+                      >
+                        <Badge variant={sMeta.variant} dot>
+                          {sMeta.label}
+                        </Badge>
+                      </Tooltip>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center justify-center">

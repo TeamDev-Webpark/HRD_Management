@@ -36,10 +36,10 @@
 - [x] **4.4 Module 07 – Career Path** — Job Family, Career Path, Career Requirements, Employee Career Plan
 
 ## Phase 5: Talent, Succession & Reports (Talent ผู้สืบทอด และรายงาน)
-- [ ] **5.1 Module 08 – Talent Management** — Talent Pool, Potential Assessment, 9-Box Grid, Talent Review
-- [ ] **5.2 Module 08 – Succession Planning** — Key Positions, Successors, Readiness Assessment, Succession Plan
-- [ ] **5.3 Module 09 – HRD Reports (Part 1)** — Performance, Training, Training History, Training Budget Reports
-- [ ] **5.4 Module 09 – HRD Reports (Part 2)** — Skill Gap, IDP, Talent & Succession, Certificate Reports + Export UI
+- [x] **5.1 Module 08 – Talent Management** — Talent Pool, Potential Assessment, 9-Box Grid, Talent Review
+- [x] **5.2 Module 08 – Succession Planning** — Key Positions, Successors, Readiness Assessment, Succession Plan
+- [x] **5.3 Module 09 – HRD Reports (Part 1)** — Performance, Training, Training History, Training Budget Reports
+- [x] **5.4 Module 09 – HRD Reports (Part 2)** — Skill Gap, IDP, Talent & Succession, Certificate Reports + Export UI
 
 ## Phase 6: Security, Self-Service & HRM Views (สิทธิ์การใช้งาน และบริการตนเอง)
 - [ ] **6.1 Module 10 – Role & Permission** — Dynamic Roles CRUD, Copy/Toggle Role, Permission Matrix 6 Actions, User Mapping, Audit Log & Security Rules

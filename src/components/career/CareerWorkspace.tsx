@@ -14,7 +14,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
-import { Card, InfoHint } from "@/components/ui";
+import { Card, InfoHint, Tooltip } from "@/components/ui";
 import {
   INITIAL_CAREER_PATHS,
   INITIAL_CAREER_REQUIREMENTS,
@@ -244,20 +244,27 @@ export function CareerWorkspace() {
       {/* Context-Aware 4 White KPI Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {kpiCards.map((kpi) => (
-          <Card key={kpi.label} className="flex items-start justify-between gap-3 p-5">
-            <div className="min-w-0">
-              <div className="text-xs font-medium text-[#64748B]">{kpi.label}</div>
-              <div className="mt-1.5 text-2xl font-bold tracking-tight text-[#1E293B]">
-                {kpi.value}
+          <Tooltip
+            key={kpi.label}
+            className="block w-full"
+            title={kpi.label}
+            content={`${kpi.value} — ${kpi.sub}`}
+          >
+            <Card className="flex items-start justify-between gap-3 p-5 transition-colors hover:border-[#DCE6F5]">
+              <div className="min-w-0">
+                <div className="text-xs font-medium text-[#64748B]">{kpi.label}</div>
+                <div className="mt-1.5 text-2xl font-bold tracking-tight text-[#1E293B]">
+                  {kpi.value}
+                </div>
+                <div className="mt-1 text-xs text-[#94A3B8]">{kpi.sub}</div>
               </div>
-              <div className="mt-1 text-xs text-[#94A3B8]">{kpi.sub}</div>
-            </div>
-            <div
-              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${kpi.color}`}
-            >
-              {kpi.icon}
-            </div>
-          </Card>
+              <div
+                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${kpi.color}`}
+              >
+                {kpi.icon}
+              </div>
+            </Card>
+          </Tooltip>
         ))}
       </div>
 

@@ -182,9 +182,19 @@ export function EmployeeCareerPlanPanel({
                       {item.timeframe}
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={sMeta.variant} dot>
-                        {sMeta.label}
-                      </Badge>
+                      <Tooltip
+                        content={
+                          item.status === "ready-now"
+                            ? "ความพร้อม ≥ 90% ผ่านเกณฑ์พร้อมพิจารณาเลื่อนระดับแล้ว"
+                            : item.status === "developing"
+                              ? "กำลังพัฒนาสมรรถนะและประสบการณ์ตามแผน IDP"
+                              : "อยู่ในช่วงสำรวจเส้นทางและเตรียมความพร้อมเบื้องต้น"
+                        }
+                      >
+                        <Badge variant={sMeta.variant} dot>
+                          {sMeta.label}
+                        </Badge>
+                      </Tooltip>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center justify-center">

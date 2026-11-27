@@ -206,9 +206,19 @@ export function EmployeeIdpPanel({ items, onChange, onNotify }: EmployeeIdpPanel
                       <Badge variant="neutral">{item.activitiesCount} รายการ</Badge>
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={sMeta.variant} dot>
-                        {sMeta.label}
-                      </Badge>
+                      <Tooltip
+                        content={
+                          item.status === "draft"
+                            ? "รอหัวหน้างานพิจารณาอนุมัติแผน IDP"
+                            : item.status === "completed"
+                              ? "ทำกิจกรรมครบ 100% และบรรลุเป้าหมายแล้ว"
+                              : "แผน IDP ได้รับการอนุมัติและอยู่ระหว่างดำเนินการ"
+                        }
+                      >
+                        <Badge variant={sMeta.variant} dot>
+                          {sMeta.label}
+                        </Badge>
+                      </Tooltip>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center justify-center">
