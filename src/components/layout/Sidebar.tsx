@@ -6,6 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import {
   ChevronDown,
   ChevronUp,
+  Compass,
   GraduationCap,
   Layers,
   LayoutDashboard,
@@ -15,6 +16,7 @@ import {
   PanelLeftOpen,
   Settings,
   Target,
+  TrendingUp,
   X,
 } from "lucide-react";
 import { useLayout } from "@/context/LayoutContext";
@@ -41,6 +43,8 @@ function MenuIcon({
   if (icon === "training") return <GraduationCap className={cls} />;
   if (icon === "lms") return <MonitorPlay className={cls} />;
   if (icon === "competency") return <Layers className={cls} />;
+  if (icon === "idp") return <TrendingUp className={cls} />;
+  if (icon === "career") return <Compass className={cls} />;
   if (icon === "settings") return <Settings className={cls} />;
   if (icon === "palette") return <Palette className={cls} />;
   return <LayoutDashboard className={cls} />;
@@ -64,6 +68,8 @@ function SidebarNavList({
     "hrd-training": pathname === "/training",
     "hrd-lms": pathname === "/lms",
     "hrd-competency": pathname === "/competency",
+    "hrd-idp": pathname === "/idp",
+    "hrd-career": pathname === "/career",
   });
 
   useEffect(() => {
