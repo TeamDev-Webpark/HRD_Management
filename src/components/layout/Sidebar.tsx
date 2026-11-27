@@ -17,6 +17,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
+  ShieldCheck,
   Target,
   TrendingUp,
   X,
@@ -49,6 +50,7 @@ function MenuIcon({
   if (icon === "career") return <Compass className={cls} />;
   if (icon === "talent") return <Award className={cls} />;
   if (icon === "reports") return <BarChart3 className={cls} />;
+  if (icon === "roles") return <ShieldCheck className={cls} />;
   if (icon === "settings") return <Settings className={cls} />;
   if (icon === "palette") return <Palette className={cls} />;
   return <LayoutDashboard className={cls} />;
@@ -76,6 +78,7 @@ function SidebarNavList({
     "hrd-career": pathname === "/career",
     "hrd-talent": pathname === "/talent",
     "hrd-reports": pathname === "/reports",
+    "hrd-roles": pathname === "/roles",
   });
 
   useEffect(() => {

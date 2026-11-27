@@ -37,7 +37,7 @@ export interface SidebarMenuItem {
   label: string;
   labelEn: string;
   href: string;
-  icon: "dashboard" | "performance" | "training" | "lms" | "competency" | "idp" | "career" | "talent" | "reports" | "settings" | "palette";
+  icon: "dashboard" | "performance" | "training" | "lms" | "competency" | "idp" | "career" | "talent" | "reports" | "roles" | "settings" | "palette";
   moduleCode?: string;
   children?: SidebarSubMenuItem[];
 }

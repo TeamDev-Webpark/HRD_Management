@@ -42,7 +42,7 @@
 - [x] **5.4 Module 09 – HRD Reports (Part 2)** — Skill Gap, IDP, Talent & Succession, Certificate Reports + Export UI
 
 ## Phase 6: Security, Self-Service & HRM Views (สิทธิ์การใช้งาน และบริการตนเอง)
-- [ ] **6.1 Module 10 – Role & Permission** — Dynamic Roles CRUD, Copy/Toggle Role, Permission Matrix 6 Actions, User Mapping, Audit Log & Security Rules
+- [x] **6.1 Module 10 – Role & Permission** — Dynamic Roles CRUD, Copy/Toggle Role, Permission Matrix 6 Actions, User Mapping, Audit Log & Security Rules
 - [ ] **6.2 Employee Self-Service (ESS)** — 8 เมนูพนักงาน
 - [ ] **6.3 Manager Self-Service (MSS)** — 7 เมนูหัวหน้างาน
 - [ ] **6.4 HRM Shared Views & Final Polish** — หน้าดูข้อมูลอ้างอิง HRM + ตรวจเช็ก Responsive & Consistency ทั้งระบบ

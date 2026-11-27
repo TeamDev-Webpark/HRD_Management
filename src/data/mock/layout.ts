@@ -148,6 +148,20 @@ export const ACTIVE_SIDEBAR_MENUS: SidebarMenuItem[] = [
     ],
   },
   {
+    id: "hrd-roles",
+    moduleCode: "10",
+    label: "บทบาทและสิทธิ์ (RBAC)",
+    labelEn: "Role & Permission",
+    href: "/roles",
+    icon: "roles",
+    children: [
+      { id: "rbac-roles", label: "จัดการบทบาท (Roles)", href: "/roles?tab=roles", tabKey: "roles", group: "สิทธิ์และความปลอดภัย" },
+      { id: "rbac-matrix", label: "ตารางสิทธิ์ (6 Actions)", href: "/roles?tab=matrix", tabKey: "matrix", group: "สิทธิ์และความปลอดภัย" },
+      { id: "rbac-users", label: "กำหนดสิทธิ์ผู้ใช้งาน", href: "/roles?tab=users", tabKey: "users", group: "สิทธิ์และความปลอดภัย" },
+      { id: "rbac-audit", label: "ประวัติการแก้ไขสิทธิ์", href: "/roles?tab=audit", tabKey: "audit", group: "สิทธิ์และความปลอดภัย" },
+    ],
+  },
+  {
     id: "hrd-settings",
     moduleCode: "10",
     label: "ตั้งค่าระบบ HRD",
