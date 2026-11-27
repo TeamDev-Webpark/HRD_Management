@@ -19,9 +19,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "HRD Management System | ระบบบริหารและพัฒนาทรัพยากรบุคคล",
+  title: "HRD | ระบบบริหารและพัฒนาทรัพยากรบุคคล",
   description:
     "ระบบบริหารและพัฒนาทรัพยากรบุคคล (Human Resource Development) สำหรับองค์กร",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

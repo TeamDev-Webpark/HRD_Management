@@ -729,7 +729,7 @@ export function ElearningClassroomPanel({
                     <Award className="h-6 w-6" />
                   </div>
                   <p className="text-[11px] font-bold uppercase tracking-widest text-[#2563EB]">
-                    Certificate of Completion • HRD PRO LMS
+                    Certificate of Completion • HRD LMS
                   </p>
                   <h3 className="text-xl font-extrabold text-[#1E293B] sm:text-2xl">
                     ใบรับรองการผ่านการฝึกอบรมออนไลน์

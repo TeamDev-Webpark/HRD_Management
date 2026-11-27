@@ -7,12 +7,14 @@ import {
   ChevronDown,
   ChevronUp,
   GraduationCap,
+  Layers,
   LayoutDashboard,
   MonitorPlay,
   Palette,
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
+  Target,
   X,
 } from "lucide-react";
 import { useLayout } from "@/context/LayoutContext";
@@ -32,11 +34,13 @@ function MenuIcon({
     active
       ? "text-white"
       : softActive
-        ? "text-[#2563EB]"
-        : "text-[#94A3B8] group-hover:text-[#2563EB]"
+        ? "text-[#60A5FA]"
+        : "text-slate-400 group-hover:text-white"
   }`;
+  if (icon === "performance") return <Target className={cls} />;
   if (icon === "training") return <GraduationCap className={cls} />;
   if (icon === "lms") return <MonitorPlay className={cls} />;
+  if (icon === "competency") return <Layers className={cls} />;
   if (icon === "settings") return <Settings className={cls} />;
   if (icon === "palette") return <Palette className={cls} />;
   return <LayoutDashboard className={cls} />;
@@ -56,8 +60,10 @@ function SidebarNavList({
   const activeTabParam = searchParams.get("tab");
 
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({
+    "hrd-performance": pathname === "/performance",
     "hrd-training": pathname === "/training",
     "hrd-lms": pathname === "/lms",
+    "hrd-competency": pathname === "/competency",
   });
 
   useEffect(() => {
@@ -86,10 +92,10 @@ function SidebarNavList({
               <button
                 type="button"
                 onClick={() => toggleGroup(item.id)}
-                className={`group flex w-full items-center justify-between rounded-xl px-4 py-3 text-[15px] transition-all cursor-pointer ${
+                className={`group flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3 text-[15px] transition-all ${
                   isCurrentRoute
-                    ? "bg-[#EFF6FF] font-semibold text-[#2563EB]"
-                    : "font-normal text-[#64748B] hover:bg-[#F7F9FC] hover:text-[#1E293B]"
+                    ? "bg-slate-800/90 font-semibold text-white ring-1 ring-slate-700/80"
+                    : "font-normal text-slate-300 hover:bg-slate-800/60 hover:text-white"
                 }`}
               >
                 <span className="flex min-w-0 items-center gap-3.5">
@@ -99,13 +105,13 @@ function SidebarNavList({
                 {isExpanded ? (
                   <ChevronUp
                     className={`h-4 w-4 shrink-0 ${
-                      isCurrentRoute ? "text-[#2563EB]" : "text-[#94A3B8]"
+                      isCurrentRoute ? "text-[#60A5FA]" : "text-slate-400"
                     }`}
                   />
                 ) : (
                   <ChevronDown
                     className={`h-4 w-4 shrink-0 ${
-                      isCurrentRoute ? "text-[#2563EB]" : "text-[#94A3B8]"
+                      isCurrentRoute ? "text-[#60A5FA]" : "text-slate-400"
                     }`}
                   />
                 )}
@@ -137,17 +143,16 @@ function SidebarNavList({
                       <div key={section.groupName ?? secIdx}>
                         {section.groupName && (
                           <div className="mb-1.5 pl-4">
-                            <span className="inline-flex items-center gap-1.5 rounded-md bg-[#F4F6FA] px-2.5 py-1 text-[11.5px] font-bold text-[#334155]">
-                              <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]/70" />
+                            <span className="inline-flex items-center gap-1.5 rounded-md bg-slate-800/80 px-2.5 py-1 text-[11.5px] font-semibold text-slate-300">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#60A5FA]" />
                               {section.groupName}
                             </span>
                           </div>
                         )}
                         <div className="relative ml-6 pl-6">
-                          {/* Continuous subtle vertical timeline line */}
                           <span
                             aria-hidden="true"
-                            className="absolute bottom-3 left-[3px] top-3 w-[1.5px] bg-[#E2E8F0]"
+                            className="absolute bottom-3 left-[3px] top-3 w-[1.5px] bg-slate-700/80"
                           />
                           <ul className="space-y-0.5">
                             {section.items.map((sub) => {
@@ -164,17 +169,16 @@ function SidebarNavList({
                                     onClick={() => isMobile && onNavigate()}
                                     className={`group flex items-center rounded-lg py-1.5 pr-3 text-[13.5px] transition-colors ${
                                       subActive
-                                        ? "font-semibold text-[#2563EB]"
-                                        : "font-normal text-[#64748B] hover:text-[#1E293B]"
+                                        ? "font-semibold text-white"
+                                        : "font-normal text-slate-400 hover:text-slate-100"
                                     }`}
                                   >
-                                    {/* Bullet dot on the vertical line */}
                                     <span
                                       aria-hidden="true"
                                       className={`absolute -left-[24px] h-2 w-2 rounded-full transition-all ${
                                         subActive
-                                          ? "bg-[#2563EB] ring-4 ring-[#EFF6FF]"
-                                          : "bg-[#CBD5E1] group-hover:bg-[#94A3B8]"
+                                          ? "bg-[#60A5FA] ring-4 ring-[#2563EB]/30"
+                                          : "bg-slate-600 group-hover:bg-slate-400"
                                       }`}
                                     />
                                     <span className="truncate">{sub.label}</span>
@@ -203,8 +207,8 @@ function SidebarNavList({
                 collapsed ? "justify-center px-2.5" : "gap-3.5 px-4"
               } ${
                 isCurrentRoute
-                  ? "bg-[#2563EB] font-medium text-white shadow-[0_8px_18px_-4px_rgba(37,99,235,0.4)]"
-                  : "font-normal text-[#64748B] hover:bg-[#F7F9FC] hover:text-[#1E293B]"
+                  ? "bg-[#2563EB] font-medium text-white shadow-[0_8px_18px_-4px_rgba(37,99,235,0.5)]"
+                  : "font-normal text-slate-300 hover:bg-slate-800/60 hover:text-white"
               }`}
             >
               <MenuIcon icon={item.icon} active={isCurrentRoute} />
@@ -225,10 +229,10 @@ export function Sidebar() {
     const collapsed = !isMobile && sidebarCollapsed;
 
     return (
-      <div className="flex h-full flex-col border-r border-[#EEF2F6] bg-white">
+      <div className="flex h-full flex-col border-r border-slate-800/80 bg-[#0F172A] text-slate-100">
         {/* Brand Header */}
         <div
-          className={`flex h-16 shrink-0 items-center px-5 ${
+          className={`flex h-16 shrink-0 items-center border-b border-slate-800/80 px-5 ${
             collapsed ? "justify-center px-3" : "justify-between"
           }`}
         >
@@ -237,12 +241,16 @@ export function Sidebar() {
             onClick={() => isMobile && setMobileMenuOpen(false)}
             className="flex min-w-0 items-center gap-3"
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] text-white shadow-[0_6px_14px_rgba(37,99,235,0.28)]">
-              <GraduationCap className="h-5 w-5" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-xs">
+              <img
+                src="/logo.png"
+                alt="HRD Logo"
+                className="h-full w-full object-contain"
+              />
             </div>
             {!collapsed && (
-              <span className="truncate text-lg font-bold tracking-wide text-[#1E293B]">
-                HRD<span className="font-semibold text-[#2563EB]">PRO</span>
+              <span className="truncate text-lg font-bold tracking-wide text-white">
+                HRD
               </span>
             )}
           </Link>
@@ -252,7 +260,7 @@ export function Sidebar() {
               type="button"
               onClick={() => setMobileMenuOpen(false)}
               aria-label="ปิดเมนู"
-              className="flex h-9 w-9 items-center justify-center rounded-xl text-[#94A3B8] hover:bg-[#F7F9FC] hover:text-[#1E293B] cursor-pointer"
+              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white"
             >
               <X className="h-5 w-5" />
             </button>
@@ -263,7 +271,7 @@ export function Sidebar() {
                 onClick={toggleSidebarCollapsed}
                 title="ย่อแถบเมนู"
                 aria-label="ย่อแถบเมนู"
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-[#94A3B8] hover:bg-[#F7F9FC] hover:text-[#1E293B] cursor-pointer"
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white"
               >
                 <PanelLeftClose className="h-4.5 w-4.5" />
               </button>
@@ -273,13 +281,13 @@ export function Sidebar() {
 
         {/* Expand Trigger when collapsed */}
         {collapsed && (
-          <div className="flex justify-center pb-2">
+          <div className="flex justify-center pt-3 pb-1">
             <button
               type="button"
               onClick={toggleSidebarCollapsed}
               title="ขยายแถบเมนู"
               aria-label="ขยายแถบเมนู"
-              className="flex h-9 w-9 items-center justify-center rounded-xl text-[#94A3B8] hover:bg-[#F7F9FC] hover:text-[#2563EB] cursor-pointer"
+              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white"
             >
               <PanelLeftOpen className="h-4.5 w-4.5" />
             </button>
@@ -287,7 +295,7 @@ export function Sidebar() {
         )}
 
         {/* Active Navigation Items */}
-        <nav aria-label="เมนูหลัก" className="hrd-scrollbar flex-1 overflow-y-auto px-4 py-3">
+        <nav aria-label="เมนูหลัก" className="hrd-scrollbar flex-1 overflow-y-auto px-4 py-3.5">
           <Suspense fallback={null}>
             <SidebarNavList
               collapsed={collapsed}
@@ -313,7 +321,7 @@ export function Sidebar() {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="fixed inset-0 bg-slate-900/30 backdrop-blur-[1px]"
+            className="fixed inset-0 bg-slate-900/40 backdrop-blur-[1px]"
             onClick={() => setMobileMenuOpen(false)}
           />
           <aside className="fixed inset-y-0 left-0 z-50 w-[264px] max-w-[85vw] shadow-xl">

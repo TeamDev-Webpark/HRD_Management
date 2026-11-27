@@ -23,7 +23,7 @@ export function Table({
   ...props
 }: TableHTMLAttributes<HTMLTableElement>) {
   return (
-    <table className={`w-full border-collapse text-left text-[15px] ${className}`} {...props}>
+    <table className={`w-full border-collapse text-left text-sm ${className}`} {...props}>
       {children}
     </table>
   );
@@ -36,7 +36,7 @@ export function TableHeader({
 }: HTMLAttributes<HTMLTableSectionElement>) {
   return (
     <thead
-      className={`border-b border-[#F1F5F9] text-[13px] font-medium text-[#94A3B8] ${className}`}
+      className={`border-b border-[#EEF2F6] text-xs font-semibold text-[#64748B] ${className}`}
       {...props}
     >
       {children}
@@ -62,7 +62,7 @@ export function TableRow({
   ...props
 }: HTMLAttributes<HTMLTableRowElement>) {
   return (
-    <tr className={`transition-colors hover:bg-[#F8FAFC] ${className}`} {...props}>
+    <tr className={`transition-colors hover:bg-[#F8FAFC]/80 ${className}`} {...props}>
       {children}
     </tr>
   );
@@ -74,7 +74,7 @@ export function TableHead({
   ...props
 }: ThHTMLAttributes<HTMLTableCellElement>) {
   return (
-    <th className={`whitespace-nowrap px-3.5 py-2.5 font-medium ${className}`} {...props}>
+    <th className={`whitespace-nowrap px-4 py-3 font-semibold ${className}`} {...props}>
       {children}
     </th>
   );
@@ -86,7 +86,7 @@ export function TableCell({
   ...props
 }: TdHTMLAttributes<HTMLTableCellElement>) {
   return (
-    <td className={`px-3.5 py-2.5 text-sm text-[#1E293B] align-middle ${className}`} {...props}>
+    <td className={`px-4 py-3.5 text-sm text-[#1E293B] align-middle ${className}`} {...props}>
       {children}
     </td>
   );

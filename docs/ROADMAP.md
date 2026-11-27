@@ -22,15 +22,15 @@
 - [x] **2.2 Module 03 – Training Resources** — Training Budget, Trainer & Provider
 - [x] **2.3 Module 03 – Training Operations** — Training Session, Enrollment & Approval, Attendance, Training Results & History
 - [x] **2.4 Module 04 – LMS Courses** — Online Courses, Lesson Management, Learning Materials
-- [ ] **2.5 Module 04 – LMS Assessment** — Question Bank, Online Assessment, Learning Progress, Certificate Management
+- [x] **2.5 Module 04 – LMS Assessment** — Question Bank, Online Assessment, Learning Progress, Certificate Management
 
 ## Phase 3: Performance Management (ประเมินผลการปฏิบัติงาน – PMS)
-- [ ] **3.1 Module 02 – Evaluation Setup** — Evaluation Cycle, Evaluation Template
-- [ ] **3.2 Module 02 – Goal & Check-in** — KPI / OKR / MBO, Progress Check-in
-- [ ] **3.3 Module 02 – Review & Calibration** — Self/Manager Review, 360° Feedback, Calibration & Final Rating, PIP Management
+- [x] **3.1 Module 02 – Evaluation Setup** — Evaluation Cycle, Evaluation Template
+- [x] **3.2 Module 02 – Goal & Check-in** — KPI / OKR / MBO, Progress Check-in
+- [x] **3.3 Module 02 – Review & Calibration** — Self/Manager Review, 360° Feedback, Calibration & Final Rating, PIP Management
 
 ## Phase 4: Competency, IDP & Career Path (ทักษะ แผนพัฒนา และสายอาชีพ)
-- [ ] **4.1 Module 05 – Competency Framework** — Competency Dictionary, Position Competency, Competency Assessment
+- [x] **4.1 Module 05 – Competency Framework** — Competency Dictionary, Position Competency, Competency Assessment
 - [ ] **4.2 Module 05 – Skill Analytics** — Skill Matrix, Skill Gap Analysis, Skill Certification History
 - [ ] **4.3 Module 06 – Individual Development Plan** — Employee IDP, Activities, Progress Tracking, Evaluation
 - [ ] **4.4 Module 07 – Career Path** — Job Family, Career Path, Career Requirements, Employee Career Plan

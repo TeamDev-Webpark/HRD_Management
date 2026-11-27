@@ -70,7 +70,7 @@ export function Topbar() {
 
   return (
     <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center justify-between gap-4 border-b border-[#EEF2F6] bg-white px-4 sm:px-6">
-      {/* Left: Mobile Trigger + Clean Soft Search Box (matching minimal reference) */}
+      {/* Left: Mobile Trigger + Clean Soft Search Box */}
       <div className="flex flex-1 items-center gap-3">
         <button
           type="button"

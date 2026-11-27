@@ -45,7 +45,6 @@ export function StatCard({
   value,
   unit,
   icon,
-  featured = false,
   tone = "blue",
   trend,
   progress,
@@ -53,39 +52,7 @@ export function StatCard({
   onClick,
   active = false,
 }: StatCardProps) {
-  if (featured) {
-    return (
-      <div className="flex flex-col justify-between rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#3B82F6] p-4.5 text-white shadow-[0_10px_24px_-6px_rgba(37,99,235,0.28)] transition-transform duration-200 hover:-translate-y-0.5">
-        <div className="flex items-center gap-3.5">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-[#2563EB] shadow-xs">
-            {icon}
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-baseline gap-1.5">
-              <span className="tabular-nums text-2xl font-bold leading-none text-white">
-                {value}
-              </span>
-              {unit && <span className="text-xs font-medium text-blue-100">{unit}</span>}
-            </div>
-            <div className="mt-1 flex items-center gap-1">
-              <p className="truncate text-xs font-medium text-blue-100">{title}</p>
-              {tooltip && <InfoHint title={title} content={tooltip} light />}
-            </div>
-          </div>
-        </div>
-
-        {(trend || footnote) && (
-          <div className="mt-3 flex items-center justify-between gap-2 text-[11px] text-blue-100/90">
-            <span>{trend?.label ?? footnote}</span>
-            {trend && footnote && <span className="opacity-80">{footnote}</span>}
-          </div>
-        )}
-      </div>
-    );
-  }
-
   const progressStyle = PROGRESS_TONE_CLASSES[tone];
-
   const interactiveProps = onClick
     ? {
         role: "button" as const,

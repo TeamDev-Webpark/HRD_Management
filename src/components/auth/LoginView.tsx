@@ -106,12 +106,16 @@ export function LoginView() {
           <div>
             {/* Brand Logo */}
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2563EB] text-white shadow-[0_8px_18px_-4px_rgba(37,99,235,0.45)]">
-                <GraduationCap className="h-6 w-6" />
+              <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5 shadow-xs ring-1 ring-[#EEF2F6]">
+                <img
+                  src="/logo.png"
+                  alt="HRD Logo"
+                  className="h-full w-full object-contain"
+                />
               </div>
               <div>
                 <span className="text-xl font-bold tracking-wide text-[#1E293B]">
-                  HRD<span className="font-semibold text-[#2563EB]">PRO</span>
+                  HRD
                 </span>
                 <p className="text-[11px] font-medium text-[#64748B]">Enterprise People Dev</p>
               </div>
@@ -173,12 +177,14 @@ export function LoginView() {
         <div className="flex flex-col justify-center p-7 sm:p-10 lg:col-span-7 lg:p-12">
           {/* Mobile Brand Header */}
           <div className="mb-6 flex items-center gap-2.5 lg:hidden">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2563EB] text-white">
-              <GraduationCap className="h-5 w-5" />
+            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-xs ring-1 ring-[#EEF2F6]">
+              <img
+                src="/logo.png"
+                alt="HRD Logo"
+                className="h-full w-full object-contain"
+              />
             </div>
-            <span className="text-lg font-bold text-[#1E293B]">
-              HRD<span className="text-[#2563EB]">PRO</span>
-            </span>
+            <span className="text-lg font-bold text-[#1E293B]">HRD</span>
           </div>
 
           <div>
