@@ -6,6 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import {
   Award,
   BarChart3,
+  Building2,
   ChevronDown,
   ChevronUp,
   Compass,
@@ -20,6 +21,8 @@ import {
   ShieldCheck,
   Target,
   TrendingUp,
+  UserCircle2,
+  Users,
   X,
 } from "lucide-react";
 import { useLayout } from "@/context/LayoutContext";
@@ -51,6 +54,9 @@ function MenuIcon({
   if (icon === "talent") return <Award className={cls} />;
   if (icon === "reports") return <BarChart3 className={cls} />;
   if (icon === "roles") return <ShieldCheck className={cls} />;
+  if (icon === "ess") return <UserCircle2 className={cls} />;
+  if (icon === "mss") return <Users className={cls} />;
+  if (icon === "hrm") return <Building2 className={cls} />;
   if (icon === "settings") return <Settings className={cls} />;
   if (icon === "palette") return <Palette className={cls} />;
   return <LayoutDashboard className={cls} />;
@@ -79,6 +85,9 @@ function SidebarNavList({
     "hrd-talent": pathname === "/talent",
     "hrd-reports": pathname === "/reports",
     "hrd-roles": pathname === "/roles",
+    "hrd-ess": pathname === "/ess",
+    "hrd-mss": pathname === "/mss",
+    "hrd-hrm": pathname === "/hrm-reference",
   });
 
   useEffect(() => {
